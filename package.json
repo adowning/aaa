@@ -1,16 +1,16 @@
 {
-  "name": "Andrews-Admin-App",
-  "version": "v0.1.0b",
+  "name": "andrews-admin",
+  "version": "v0.1.0c",
   "description": "Administration app for Andrews",
-  "productName": "AndrewsAdminApp",
-  "cordovaId": "org.cordova.quasar.app",
+  "productName": "andrews-admin",
+  "cordovaId": "org.cordova.andrews.app",
   "author": "adowning <ashdowning@gmail.com>",
   "main": "src-electron/electron-main.js",
   "private": false,
-  "repository": "https://github.com/UserName/RepoName",
+  "repository": "https://github.com/adowning/andrews-admin.git",
   "build": {
     "squirrelWindows": {
-      "remoteReleases": "http://localhost:9000/dist/win1/"
+      "remoteReleases": "http://localhost:4567/dist/win1/"
     },
     "win": {
       "certificateFile": "./certs/my_signing_key.pfx",
@@ -23,6 +23,7 @@
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
+    "dist": "electron-builder",
     "publish": "build -p always"
   },
   "dependencies": {
