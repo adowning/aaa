@@ -1,6 +1,6 @@
 {
   "name": "andrews-admin",
-  "version": "v0.1.0c",
+  "version": "v0.1.02",
   "description": "Administration app for Andrews",
   "productName": "andrews-admin",
   "cordovaId": "org.cordova.andrews.app",

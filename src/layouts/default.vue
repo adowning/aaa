@@ -88,7 +88,9 @@
     <q-layout-footer v-model="footer"  >
       <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #31CCEC !important; color:#4c566a;">
         <q-toolbar-title class="q-caption">
-     
+       <div>
+    Battery status is: <strong>{{ batteryStatus }}</strong>
+  </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-footer>
@@ -109,7 +111,7 @@ export default {
 			leftDrawerOpen: true,
 			search: {},
 			footer: true,
-			// user: null,
+			batteryStatus: "determining...",
 		}
 	},
 	// beforeRouteEnter(to, from, next) {
@@ -154,12 +156,26 @@ export default {
 	},
 
 	methods: {
+		updateBatteryStatus(status) {
+			this.batteryStatus = `Level: ${status.level}, plugged: ${
+				status.isPlugged
+			}`
+		},
 		// openURL,
 		logOut(reason) {
 			if (reason) {
 				Notify.create(reason)
 			}
 			this.$router.push({ path: "login" })
+		},
+		beforeDestroy() {
+			// we make some cleanup;
+			// we need to remove the event listener
+			window.removeEventListener(
+				"batterystatus",
+				this.updateBatteryStatus,
+				false,
+			)
 		},
 	},
 }

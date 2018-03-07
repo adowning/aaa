@@ -56,17 +56,13 @@ plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 
 
-import electron from 'electron'
-Vue.prototype.$q.electron = electron
 
 
 
 
 
 
-
-import boot from 'src/plugins/boot'
-boot({ app, router, store, Vue })
+new Vue(app)
 
 
 

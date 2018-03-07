@@ -3,7 +3,7 @@
 module.exports = function(ctx) {
   return {
     // app plugins (/src/plugins)
-    plugins: ["boot", "axios", "firebase", "vuelidate"],
+    plugins: ["axios", "firebase", "vuelidate"],
     css: ["app.styl"],
     extras: [
       ctx.theme.mat ? "roboto-font" : null,

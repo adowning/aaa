@@ -4,19 +4,19 @@
   <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.blue-orange.min.css">
 
 
-<q-card inline style="width: 500px">
+<!-- <q-card inline style="width: 500px">
   <q-card-media>
     <img src="../assets/sad.svg">
   </q-card-media>
-  <q-card-title>
+ <q-card-title>
     Cafe Basilico
-    <q-rating slot="subtitle" v-model="stars" :max="5" /> -->
+    <q-rating slot="subtitle" v-model="stars" :max="5" /> 
     <div slot="right" class="row items-center">
       <q-icon name="place" /> 250 ft
    </div>
-  </q-card-title>
+  </q-card-title> 
   <q-card-main>
-    <p>$・Italian, Cafe</p>
+  
     <p class="text-faded">Small plates, salads & sandwiches in an intimate setting.</p>
   </q-card-main>
   <q-card-separator />
@@ -27,11 +27,12 @@
     <q-btn flat label="9:00PM" />
     <q-btn flat color="primary" label="Reserve" />
   </q-card-actions>
-</q-card>
+</q-card> -->
     <div class="col-8">
     <div class="mdl-card mdl-shadow--2dp demo-card-square">
     <div class="mdl-card__title mdl-card--expand">
-      <h2 class="mdl-card__title-text">Card 1</h2>
+    <img src="../assets/sad.svg">
+   
     </div>
     <div class="mdl-card__supporting-text">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenan convallis.
@@ -110,150 +111,150 @@
 
 <script>
 // import firebase from "firebase"
-import firebase from "./firebaseInit";
-import "firebase/firestore";
-import "firebase/storage";
+import firebase from "./firebaseInit"
+import "firebase/firestore"
+import "firebase/storage"
 
-const db = firebase.firestore();
-const storageRef = firebase.storage().ref();
-const imagesRef = storageRef.child("home");
+const db = firebase.firestore()
+const storageRef = firebase.storage().ref()
+const imagesRef = storageRef.child("home")
 
 export default {
-  name: "Employees",
-  data() {
-    return {
-      newServiceDialog: false,
-      serviceFormValid: true,
-      newService: {
-        id: null,
-        name: null,
-        url: null
-        // description: null,
-        // position: null,
-      },
-      // tableHeaders: [
-      // 	{ text: "Position", value: "position" },
-      // 	{ text: "Icon", value: "icon" },
-      // 	// { text: "Title", value: "title" },
-      // 	// { text: "Description", value: "description" },
-      // ],
-      services: [],
-      servicesLoading: false,
-      editOn: false
-    };
-  },
-  methods: {
-    listServices() {
-      this.servicesLoading = true;
-      this.services = [];
-      db
-        .collection("employees")
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const data = {
-              id: doc.id,
-              icon: doc.data().name,
-              title: doc.data().url
-              // description: doc.data().description,
-              // position: doc.data().position,
-            };
-            this.services.push(data);
-          });
-        });
-      this.servicesLoading = false;
-    },
-    createNewService() {
-      if (
-        !this.newService.name ||
-        !this.newService.url
-        // !this.newService.description ||
-        // !this.newService.position
-      )
-        return;
-      db
-        .collection("services")
-        .add({
-          icon: this.newService.name,
-          title: this.newService.url
-          // description: this.newService.description,
-          // position: this.newService.position,
-        })
-        .then(docRef => {
-          this.listServices();
-          this.resetNewService();
-          this.newServiceDialog = false;
-        })
-        .catch(error => console.log(err));
-    },
-    resetNewService() {
-      this.newService = {
-        id: null,
-        icon: null,
-        title: null,
-        description: null,
-        position: null
-      };
-      this.editOn = false;
-      this.newServiceDialog = false;
-      this.$refs.serviceForm.reset();
-    },
-    startEdit(service) {
-      this.newService = {
-        id: service.id,
-        icon: service.icon,
-        title: service.title,
-        description: service.description,
-        position: service.position
-      };
-      this.editOn = true;
-      this.newServiceDialog = true;
-    },
-    updateService() {
-      if (
-        !this.newService.icon ||
-        !this.newService.title ||
-        !this.newService.description ||
-        !this.newService.position
-      )
-        return;
-      const docRef = db.collection("services").doc(this.newService.id);
-      docRef
-        .set({
-          title: this.newService.title,
-          description: this.newService.description,
-          position: this.newService.position,
-          icon: this.newService.icon
-        })
-        .then(doc => {
-          this.listServices();
-          console.log("Document successfully written!", doc);
-          this.resetNewService();
-        })
-        .catch(() => {
-          console.error("Error writing document: ", error);
-        });
-    },
-    deleteService(service) {
-      if (confirm("Are you sure?")) {
-        const docRef = db
-          .collection("services")
-          .doc(service.id)
-          .delete()
-          .then(data => {
-            this.listServices();
-            console.log("Document successfully deleted!");
-          })
-          .catch(error => {
-            console.error("Error removing document: ", error);
-          });
-      }
-    }
-  },
-  created() {
-    this.listPhotos();
-  }
-};
+	name: "Employees",
+	data() {
+		return {
+			newServiceDialog: false,
+			serviceFormValid: true,
+			newService: {
+				id: null,
+				name: null,
+				url: null,
+				// description: null,
+				// position: null,
+			},
+			// tableHeaders: [
+			// 	{ text: "Position", value: "position" },
+			// 	{ text: "Icon", value: "icon" },
+			// 	// { text: "Title", value: "title" },
+			// 	// { text: "Description", value: "description" },
+			// ],
+			services: [],
+			servicesLoading: false,
+			editOn: false,
+		}
+	},
+	methods: {
+		listServices() {
+			this.servicesLoading = true
+			this.services = []
+			db
+				.collection("employees")
+				.get()
+				.then(querySnapshot => {
+					querySnapshot.forEach(doc => {
+						const data = {
+							id: doc.id,
+							icon: doc.data().name,
+							title: doc.data().url,
+							// description: doc.data().description,
+							// position: doc.data().position,
+						}
+						this.services.push(data)
+					})
+				})
+			this.servicesLoading = false
+		},
+		createNewService() {
+			if (
+				!this.newService.name ||
+				!this.newService.url
+				// !this.newService.description ||
+				// !this.newService.position
+			)
+				return
+			db
+				.collection("services")
+				.add({
+					icon: this.newService.name,
+					title: this.newService.url,
+					// description: this.newService.description,
+					// position: this.newService.position,
+				})
+				.then(docRef => {
+					this.listServices()
+					this.resetNewService()
+					this.newServiceDialog = false
+				})
+				.catch(error => console.log(err))
+		},
+		resetNewService() {
+			this.newService = {
+				id: null,
+				icon: null,
+				title: null,
+				description: null,
+				position: null,
+			}
+			this.editOn = false
+			this.newServiceDialog = false
+			this.$refs.serviceForm.reset()
+		},
+		startEdit(service) {
+			this.newService = {
+				id: service.id,
+				icon: service.icon,
+				title: service.title,
+				description: service.description,
+				position: service.position,
+			}
+			this.editOn = true
+			this.newServiceDialog = true
+		},
+		updateService() {
+			if (
+				!this.newService.icon ||
+				!this.newService.title ||
+				!this.newService.description ||
+				!this.newService.position
+			)
+				return
+			const docRef = db.collection("services").doc(this.newService.id)
+			docRef
+				.set({
+					title: this.newService.title,
+					description: this.newService.description,
+					position: this.newService.position,
+					icon: this.newService.icon,
+				})
+				.then(doc => {
+					this.listServices()
+					console.log("Document successfully written!", doc)
+					this.resetNewService()
+				})
+				.catch(() => {
+					console.error("Error writing document: ", error)
+				})
+		},
+		deleteService(service) {
+			if (confirm("Are you sure?")) {
+				const docRef = db
+					.collection("services")
+					.doc(service.id)
+					.delete()
+					.then(data => {
+						this.listServices()
+						console.log("Document successfully deleted!")
+					})
+					.catch(error => {
+						console.error("Error removing document: ", error)
+					})
+			}
+		},
+	},
+	created() {
+		this.listPhotos()
+	},
+}
 // processFiles(event) {
 //   this.photosToUpload = event.target.files;
 // },
@@ -377,30 +378,30 @@ export default {
 
 <style scoped>
 .demo-card-square.mdl-card {
-  width: 320px;
-  height: 320px;
-  float: left;
-  margin: 1rem;
-  position: relative;
+	width: 320px;
+	height: 320px;
+	float: left;
+	margin: 1rem;
+	position: relative;
 }
 
 .demo-card-square.mdl-card:hover {
-  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+		0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
 }
 
 .demo-card-square > .mdl-card__title {
-  color: #fff;
-  background: #03a9f4;
+	color: #fff;
+	background: #03a9f4;
 }
 
 .demo-card-square > .mdl-card__accent {
-  background: #ff9800;
+	background: #ff9800;
 }
 
 body {
-  padding: 20px;
-  background: #fafafa;
-  position: relative;
+	padding: 20px;
+	background: #fafafa;
+	position: relative;
 }
 </style>
