@@ -1,6 +1,6 @@
 import Vue from "vue"
 import Vuex from "vuex"
-import * as firebase from "firebase"
+import firebase from "../components/firebaseInit"
 import AuthModule from "./AuthModule"
 // import ChatModule from "./ChatModule"
 import VuexPersist from "vuex-persist"

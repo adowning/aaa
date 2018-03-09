@@ -101,6 +101,9 @@ export default {
 			}
 		},
 	},
+	created() {
+		console.log(this.$route.query.id) // outputs 'yay'
+	},
 	methods: {
 		//     getUserProfile() {
 		//     if(window.localStorage.getItem("userInfo")){

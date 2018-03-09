@@ -15,8 +15,8 @@
           Andrews Group
           <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
         </q-toolbar-title>
-        <q-search inverted v-model="search" color="none" class="q-mr-xl" />
-                <q-btn flat round dense icon="exit to app" label="Logout" @click="logOut()"></q-btn>
+        <q-search inverted v-model="search" color="none" value="x" class="q-mr-xl" />
+                <q-btn flat round dense icon="exit to app" label="Logout"  @click="logOut()"></q-btn>
                 <span>{{user.username}}</span>
       </q-toolbar>
     </q-layout-header>
@@ -67,8 +67,8 @@
       <q-item to="/directory">
         <q-item-main label="Directory"/>
       </q-item>
-     <q-item to="/profile">
-        <q-item-main label="Profile"/>
+     <q-item :to="'/profile?id='+user.emp_id+''">
+        <q-item-main label="My Profile"/>
       </q-item>
   </q-collapsible>
    <q-item to="/documents">
@@ -89,7 +89,6 @@
       <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #31CCEC !important; color:#4c566a;">
         <q-toolbar-title class="q-caption">
        <div>
-    Battery status is: <strong>{{ batteryStatus }}</strong>
   </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -109,7 +108,7 @@ export default {
 	data() {
 		return {
 			leftDrawerOpen: true,
-			search: {},
+			search: " ",
 			footer: true,
 			batteryStatus: "determining...",
 		}
@@ -133,8 +132,8 @@ export default {
 		error() {
 			return this.$store.getters.error
 		},
-		loading() {
-			return this.$store.getters.loading
+		onlineUsers() {
+			return this.$store.getters.onlineUsers
 		},
 	},
 	watch: {
@@ -166,7 +165,7 @@ export default {
 			if (reason) {
 				Notify.create(reason)
 			}
-			this.$router.push({ path: "login" })
+			this.$router.push({ path: "/" })
 		},
 		beforeDestroy() {
 			// we make some cleanup;

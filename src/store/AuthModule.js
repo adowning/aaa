@@ -10,6 +10,7 @@ const AuthModule = {
       state.user = payload
       const userListRef = firebase.database().ref("presence")
       const myUserRef = userListRef.push()
+      firebase.databaseURL = "https://andrewsadmin.firebaseio.com"
 
       firebase
         .database()

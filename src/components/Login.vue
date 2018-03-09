@@ -9,16 +9,16 @@
           <div class="row justify-center ">
         <div class="input-group ">
           <span class="input-group-addon "><i class="fa fa-envelope"></i></span>
-          <input class="form-control " name="email" placeholder="Email" type="text" model="form.email">
-        </div>
-        <div class="input-group  ">
+          <input class="form-control " name="email" placeholder="Email" type="text" model="form.email"><br>
+        <!-- </div>
+        <div class="input-group  "> -->
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input class="form-control" name="password" placeholder="Password" type="password" model="form.pass">
         </div>
 		<div class="q-pa-sm">
            <q-btn  color="primary" @click="onSignin">Submit</q-btn>
 		</div>
-	
+          </div>
             </div>
           </div>
 		       <div class="row justify-center">
@@ -68,6 +68,7 @@ export default {
 	methods: {
 		onSignin() {
 			window.localStorage.clear()
+			window.sessionStorage.clear()
 			this.$store.dispatch("signUserIn", {
 				// {email: this.email, password: this.password}
 				email: "d@d.com",

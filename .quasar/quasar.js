@@ -10,6 +10,6 @@
 
 
 import Vue from 'vue'
-import Quasar, {QLayout,QAlert,QSearch,QTabs,QTab,QTabPane,QRouteTab,QLayoutFooter,QCollapsible,QLayoutHeader,QLayoutDrawer,QPageContainer,QPage,QToolbar,QToolbarTitle,QBtn,QIcon,QList,QListHeader,QItem,QItemMain,QItemSeparator,QItemSide,QItemTile} from 'quasar'
+import Quasar, * as All from 'quasar'
 
-Vue.use(Quasar, {components: {QLayout,QAlert,QSearch,QTabs,QTab,QTabPane,QRouteTab,QLayoutFooter,QCollapsible,QLayoutHeader,QLayoutDrawer,QPageContainer,QPage,QToolbar,QToolbarTitle,QBtn,QIcon,QList,QListHeader,QItem,QItemMain,QItemSeparator,QItemSide,QItemTile}})
+Vue.use(Quasar, {components: All, directives: All, plugins: All})

@@ -1,120 +1,52 @@
 <template>
-  <div id="Employees" >
-  <q-page-container>
-  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.blue-orange.min.css">
+  <div id="Employees" style="padding: 100px;" >
+  <!-- <q-page-container> -->
+  <!-- <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.blue-orange.min.css"> -->
 
-
-<!-- <q-card inline style="width: 500px">
-  <q-card-media>
-    <img src="../assets/sad.svg">
+	<q-page class="row">
+	  <div class="row no-wrap q-ma-xl" style="max-height: 260px;"  v-for="employee in employees"  >
+		  <q-card square color="secondary" >
+			    <q-card-media style="background-color: #4c566a; text-align: center;">
+  <img :src="employee.photoUrl" style="width: 140px; height: 140px;" class="avatar img-thumbnail hidden-print inline-block q-ma-sm" > 
+    <!-- <img src="~assets/sad.svg"> -->
   </q-card-media>
- <q-card-title>
-    Cafe Basilico
-    <q-rating slot="subtitle" v-model="stars" :max="5" /> 
-    <div slot="right" class="row items-center">
-      <q-icon name="place" /> 250 ft
-   </div>
-  </q-card-title> 
-  <q-card-main>
-  
-    <p class="text-faded">Small plates, salads & sandwiches in an intimate setting.</p>
+  <!-- <q-card-title>
+      {{employee.full_name}}
+
+  </q-card-title> -->
+  <q-card-main style="background-color: #4c566a; text-align: center;" >
+   <!-- {{employee.full_name}}
+    -->
+	{{employee.full_name}}
+
+    <!-- <p>$・Italian, Cafe</p>
+    <p class="text-faded">Small plates, salads</p> -->
   </q-card-main>
   <q-card-separator />
-  <q-card-actions>
-    <q-btn flat round dense icon="event" />
-    <q-btn flat label="5:30PM" />
-    <q-btn flat label="7:30PM" />
-    <q-btn flat label="9:00PM" />
-    <q-btn flat color="primary" label="Reserve" />
-  </q-card-actions>
-</q-card> -->
-    <div class="col-8">
-    <div class="mdl-card mdl-shadow--2dp demo-card-square">
-    <div class="mdl-card__title mdl-card--expand">
-    <img src="../assets/sad.svg">
-   
-    </div>
-    <div class="mdl-card__supporting-text">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenan convallis.
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-      <a class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect">
-          Action
-        </a>
-    </div>
-  </div>
-  </div>
-   <!-- <q-card>
-                <q-card-title>
-                <span v-if="!editOn" class="headline">Create New Service</span>
-                <span v-else class="headline">Edit Service</span>
-                </q-card-title>
-                <q-card-text>
-                    <v-container grid-list-md>
-                        <v-layout wrap>
-                            <v-flex xs12>
-                                <v-form v-model="serviceFormValid" ref="serviceForm" lazy-validation>
-                                    <v-text-field name="icon" label="icon" v-model="newService.icon" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field name="title" label="title" v-model="newService.title" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field textarea name="description" label="description" v-model="newService.description" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field type="number" name="position" label="position" v-model="newService.position" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                </v-form>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </q-card-text>
-                <q-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.native="resetNewService()">Cancel</v-btn>
-                <v-btn v-if="!editOn" color="teal darken-1" flat @click.native="createNewService()" :disabled="!serviceFormValid">Submit</v-btn>
-                <v-btn v-else color="teal darken-1" flat @click.native="updateService()" :disabled="!serviceFormValid">Submit</v-btn>
-                </q-card-actions>
-            </q-card> -->
- <!-- <v-card>
-                <v-card-title>
-                <span v-if="!editOn" class="headline">Create New Service</span>
-                <span v-else class="headline">Edit Service</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-container grid-list-md>
-                        <v-layout wrap>
-                            <v-flex xs12>
-                                <v-form v-model="serviceFormValid" ref="serviceForm" lazy-validation>
-                                    <v-text-field name="icon" label="icon" v-model="newService.icon" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field name="title" label="title" v-model="newService.title" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field textarea name="description" label="description" v-model="newService.description" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                    <v-text-field type="number" name="position" label="position" v-model="newService.position" required
-                                    :rules="[v => !!v || 'Item is required']"></v-text-field>
-                                </v-form>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" flat @click.native="resetNewService()">Cancel</v-btn>
-                <v-btn v-if="!editOn" color="teal darken-1" flat @click.native="createNewService()" :disabled="!serviceFormValid">Submit</v-btn>
-                <v-btn v-else color="teal darken-1" flat @click.native="updateService()" :disabled="!serviceFormValid">Submit</v-btn>
-                </v-card-actions>
-            </v-card> -->
-    </q-page-container>
+ <q-card-actions >
+        <q-btn flat>View</q-btn>
+        <q-btn flat>Contact</q-btn>
+        <!-- <q-btn flat>Photo</q-btn> -->
+      </q-card-actions>
+		  </q-card>
+<!-- </q-card> -->
+	  </div>
+<!-- {{employee}} -->
+	 <!-- </div> -->
+	 <!-- </div> -->
+	  <!-- <q-btn flat @click="createEmployees">Create employes</q-btn> -->
+	  </q-page>
+    <!-- </q-page-container> -->
   </div>
 </template>
-  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+  <!--<script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>-->
 
 <script>
 // import firebase from "firebase"
 import firebase from "./firebaseInit"
 import "firebase/firestore"
 import "firebase/storage"
-
+import { ENGINE_METHOD_CIPHERS } from "constants"
 const db = firebase.firestore()
 const storageRef = firebase.storage().ref()
 const imagesRef = storageRef.child("home")
@@ -123,285 +55,380 @@ export default {
 	name: "Employees",
 	data() {
 		return {
-			newServiceDialog: false,
-			serviceFormValid: true,
-			newService: {
+			employeeDialog: false,
+			employeeFormValid: true,
+			newEmployee: {
 				id: null,
 				name: null,
 				url: null,
-				// description: null,
-				// position: null,
 			},
-			// tableHeaders: [
-			// 	{ text: "Position", value: "position" },
-			// 	{ text: "Icon", value: "icon" },
-			// 	// { text: "Title", value: "title" },
-			// 	// { text: "Description", value: "description" },
-			// ],
-			services: [],
+			employees: [],
 			servicesLoading: false,
 			editOn: false,
 		}
 	},
 	methods: {
-		listServices() {
-			this.servicesLoading = true
-			this.services = []
+		listEmployees() {
+			this.employeesLoading = true
+			this.employees = []
 			db
 				.collection("employees")
 				.get()
 				.then(querySnapshot => {
 					querySnapshot.forEach(doc => {
 						const data = {
-							id: doc.id,
-							icon: doc.data().name,
-							title: doc.data().url,
-							// description: doc.data().description,
-							// position: doc.data().position,
+							name: doc.data.cdl,
+							// id: doc.id,
+							// emp_id: doc.emp_id,
+							// gender: doc.gender,
+							// marital_status: doc.marital_status,
+							// self_id_method: doc.self_id_method,
+							// state: doc.state,
+							// vet_type: doc.vet_type,
+							// authorised_db_user: doc.authorised_db_user,
+							// cdl: doc.cdl,
+							// new_hire: doc.new_hire,
+							// recent_date_of_hire: doc.recent_date_of_hire,
+							// snapshotlogin_name: doc.snapshotlogin_name,
+							// password: null,
+							// first_name: doc.data.first_name,
+							// middle_initial: doc.data.middle_initial,
+							// last_name: doc.data.last_name,
+							// suffix: doc.data.suffix,
+							// preferred_name: doc.data.preferred_name,
+							// suffix: doc.data.suffix,
+							// other_lastnames: doc.data.suffixother_lastnames,
+							// date_of_birth: doc.data.date_of_birth,
+							// mailing_address_line_1: doc.data.emp_id,
+							// mailing_address_line_2:
+							// 	doc.data.mailing_address_line_1,
+							// zipcode: doc.data.zipcode,
+							// cell_phone: doc.data.cell_phone,
+							// alt_phone: doc.data.alt_phone,
+							// home_fax: doc.data.home_fax,
+							// home_email: doc.data.home_email,
+							// photoURL: doc.data.photoURL,
+							// notes: doc.data.notes,
+							// drivers_license_nbr: doc.data.drivers_license_nbr,
+							// signed_docs: doc.data.signed_docs,
 						}
-						this.services.push(data)
+						// console.log(data)
+						this.employees.push(doc.data())
 					})
 				})
-			this.servicesLoading = false
+			this.employeesLoading = false
 		},
-		createNewService() {
-			if (
-				!this.newService.name ||
-				!this.newService.url
-				// !this.newService.description ||
-				// !this.newService.position
-			)
-				return
-			db
-				.collection("services")
-				.add({
-					icon: this.newService.name,
-					title: this.newService.url,
-					// description: this.newService.description,
-					// position: this.newService.position,
-				})
-				.then(docRef => {
-					this.listServices()
-					this.resetNewService()
-					this.newServiceDialog = false
-				})
-				.catch(error => console.log(err))
-		},
-		resetNewService() {
-			this.newService = {
-				id: null,
-				icon: null,
-				title: null,
-				description: null,
-				position: null,
-			}
-			this.editOn = false
-			this.newServiceDialog = false
-			this.$refs.serviceForm.reset()
-		},
-		startEdit(service) {
-			this.newService = {
-				id: service.id,
-				icon: service.icon,
-				title: service.title,
-				description: service.description,
-				position: service.position,
-			}
-			this.editOn = true
-			this.newServiceDialog = true
-		},
-		updateService() {
-			if (
-				!this.newService.icon ||
-				!this.newService.title ||
-				!this.newService.description ||
-				!this.newService.position
-			)
-				return
-			const docRef = db.collection("services").doc(this.newService.id)
-			docRef
-				.set({
-					title: this.newService.title,
-					description: this.newService.description,
-					position: this.newService.position,
-					icon: this.newService.icon,
-				})
-				.then(doc => {
-					this.listServices()
-					console.log("Document successfully written!", doc)
-					this.resetNewService()
-				})
-				.catch(() => {
-					console.error("Error writing document: ", error)
-				})
-		},
-		deleteService(service) {
-			if (confirm("Are you sure?")) {
-				const docRef = db
-					.collection("services")
-					.doc(service.id)
-					.delete()
-					.then(data => {
-						this.listServices()
-						console.log("Document successfully deleted!")
+		createEmployees() {
+			let list = [
+				{
+					first_name: "Ash",
+					last_name: "Downing",
+					full_name: "Ash Downing",
+					gender: "M",
+					position: "Techician",
+					cellPhone: "903-530-1197",
+					wage: 50,
+				},
+				{
+					first_name: "Adreain",
+					last_name: "Dunn",
+					full_name: "Adreain Dunn",
+					gender: "M",
+					position: "Lead",
+					cellPhone: "903-372-5013",
+					wage: 50,
+				},
+				{
+					first_name: "Codey",
+					last_name: "Rush",
+					gender: "M",
+					full_name: "Codey Rush",
+					position: "Helper",
+					cellPhone: null,
+					wage: 50,
+				},
+				{
+					first_name: "Dairi",
+					last_name: "Bustos",
+					gender: "F",
+					full_name: "Dairi Bustos",
+					position: "Helper",
+					cellPhone: null,
+					wage: 50,
+				},
+				{
+					first_name: "Darien",
+					last_name: "Dunn",
+					gender: "M",
+					full_name: "Darien Dunn",
+					position: "Helper",
+					cellPhone: "903-330-9874",
+					wage: 50,
+				},
+				{
+					first_name: "Hilaria",
+					last_name: "Robles",
+					gender: "F",
+					full_name: "Hilaria Robles",
+					position: "Techician",
+					cellPhone: null,
+					wage: 50,
+				},
+
+				{
+					first_name: "Jerran",
+					last_name: "McGee",
+					gender: "M",
+					full_name: "Jerran McGee",
+					position: "Helper",
+					cellPhone: "402-598-8309",
+					wage: 50,
+				},
+
+				{
+					first_name: "Jessica",
+					last_name: "Johnson",
+					gender: "F",
+					full_name: "Jessica Johnson",
+					position: "Lead",
+					cellPhone: "903-603-0837",
+					wage: 50,
+				},
+				{
+					first_name: "John",
+					last_name: "Chance",
+					gender: "M",
+					full_name: "John Chance",
+					position: "Supervisor",
+					cellPhone: "903-571-9131",
+					wage: 50,
+				},
+				{
+					first_name: "John",
+					last_name: "Weldon",
+					gender: "M",
+					full_name: "John Weldon",
+					position: "Contractor",
+					cellPhone: "903-780-3373",
+					wage: 50,
+				},
+
+				{
+					first_name: "Juan",
+					last_name: "Leon",
+					gender: "M",
+					full_name: "Juan Leon",
+					position: "Lead",
+					cellPhone: "903725013",
+					wage: 50,
+				},
+				{
+					first_name: "Kathy",
+					last_name: "Loftis",
+					gender: "F",
+					full_name: "Kathy Loftis",
+					position: "Office",
+					cellPhone: null,
+					wage: 50,
+				},
+				{
+					first_name: "Kayla",
+					last_name: "Rush",
+					gender: "F",
+					full_name: "Kayla Rush",
+					position: "Helper",
+					cellPhone: "903-780-7073",
+					wage: 50,
+				},
+
+				{
+					first_name: "Letesia",
+					last_name: "Ford",
+					gender: "F",
+					full_name: "Letesia Ford",
+					position: "Helper",
+					cellPhone: "903-705-5094",
+					wage: 50,
+				},
+
+				{
+					first_name: "Mark",
+					last_name: "Schrader",
+					gender: "M",
+					full_name: "Mark Schrader",
+					position: "Manager",
+					cellPhone: "903725013",
+					wage: 50,
+				},
+				{
+					first_name: "Randi",
+					last_name: "Newton",
+					gender: "F",
+					full_name: "Randi Newton",
+					position: "Supervisor",
+					cellPhone: "903-617-3485",
+					wage: 50,
+				},
+				{
+					first_name: "Nathan",
+					last_name: "Dungca",
+					gender: "M",
+					full_name: "Nathan Dungca",
+					position: "Supervisor",
+					cellPhone: "903-504-3544",
+					wage: 50,
+				},
+
+				{
+					first_name: "Tawnya",
+					last_name: "Jackson",
+					gender: "F",
+					full_name: "Tawnya Jackson",
+					position: "Supervisor",
+					cellPhone: "903-705-5467",
+					wage: 50,
+				},
+				{
+					first_name: "Virginia",
+					last_name: "Rodriguez",
+					gender: "F",
+					full_name: "Virginia Rodriguez",
+					position: "Lead",
+					cellPhone: "903-952-7065",
+					wage: 50,
+				},
+			]
+			console.log("creating list ", list)
+			var i = 0
+			for (let value of list) {
+				var _userId = (
+					value.first_name.charAt(0) +
+					"." +
+					value.last_name
+				).toLowerCase()
+				var _email = _userId + "@ashdevtools.com"
+				if (i < 10) {
+					var _emp_id = "000" + (i++).toString()
+				} else {
+					var _emp_id = "00" + (i++).toString()
+				}
+				var _photoUrl =
+					"https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F" +
+					_emp_id +
+					".jpg?alt=media"
+				var _fullname = value.first_name + " " + value.last_name
+				console.log(_userId)
+				db
+					.collection("employees")
+					.doc(_userId)
+					.set({
+						emp_id: _emp_id,
+						gender: "M",
+						work_email: _email,
+						marital_status: "s",
+						vet_type: null,
+						authorised_db_user: true,
+						cdl: false,
+						new_hire: false,
+						recent_date_of_hire: "01/01/2000",
+						user_name: _userId,
+						password: null,
+						first_name: value.first_name,
+						middle_initial: null,
+						last_name: value.last_name,
+						suffix: null,
+						preferred_name: _fullname,
+						full_name: _fullname,
+						other_lastnames: null,
+						date_of_birth: "03/06/1975",
+						mailing_address_line_1: "3654 Hanover Pl",
+						mailing_address_line_2: null,
+						zipcode: "75701",
+						state: "TX",
+						city: "Tyler",
+						cell_phone: value.cellPhone,
+						alt_phone: null,
+						home_fax: null,
+						home_email: null,
+						notes: [],
+						photoUrl: _photoUrl,
+						drivers_license_nbr: null,
+						position: value.position,
+						documents: [],
+						wage: value.wage,
 					})
-					.catch(error => {
-						console.error("Error removing document: ", error)
-					})
 			}
 		},
+		// resetNewService() {
+		// 	this.newService = {
+		// 		id: null,
+		// 		icon: null,
+		// 		title: null,
+		// 		description: null,
+		// 		position: null,
+		// 	}
+		// 	this.editOn = false
+		// 	this.newServiceDialog = false
+		// 	this.$refs.serviceForm.reset()
+		// },
+		// startEdit(service) {
+		// 	this.newService = {
+		// 		id: service.id,
+		// 		icon: service.icon,
+		// 		title: service.title,
+		// 		description: service.description,
+		// 		position: service.position,
+		// 	}
+		// 	this.editOn = true
+		// 	this.newServiceDialog = true
+		// },
+		// updateService() {
+		// 	if (
+		// 		!this.newService.icon ||
+		// 		!this.newService.title ||
+		// 		!this.newService.description ||
+		// 		!this.newService.position
+		// 	)
+		// 		return
+		// 	const docRef = db.collection("services").doc(this.newService.id)
+		// 	docRef
+		// 		.set({
+		// 			title: this.newService.title,
+		// 			description: this.newService.description,
+		// 			position: this.newService.position,
+		// 			icon: this.newService.icon,
+		// 		})
+		// 		.then(doc => {
+		// 			this.listServices()
+		// 			console.log("Document successfully written!", doc)
+		// 			this.resetNewService()
+		// 		})
+		// 		.catch(() => {
+		// 			console.error("Error writing document: ", error)
+		// 		})
+		// },
+		// deleteService(service) {
+		// 	if (confirm("Are you sure?")) {
+		// 		const docRef = db
+		// 			.collection("services")
+		// 			.doc(service.id)
+		// 			.delete()
+		// 			.then(data => {
+		// 				this.listServices()
+		// 				console.log("Document successfully deleted!")
+		// 			})
+		// 			.catch(error => {
+		// 				console.error("Error removing document: ", error)
+		// 			})
+		// 	}
+		// },
 	},
 	created() {
-		this.listPhotos()
+		this.listEmployees()
 	},
 }
-// processFiles(event) {
-//   this.photosToUpload = event.target.files;
-// },
-// uploadPhotos() {
-//   this.uploadOn = true;
-//   const ref = "homePhotos";
-//   Array.from(this.photosToUpload).forEach(photo => {
-//     var uploadTask = storageRef.child(ref + "/" + photo.name).put(photo);
-//     // Register three observers:
-//     // 1. 'state_changed' observer, called any time the state changes
-//     // 2. Error observer, called on failure
-//     // 3. Completion observer, called on successful completion
-//     uploadTask.on(
-//       "state_changed",
-//       function(snapshot) {
-//         // Observe state change events such as progress, pause, and resume
-//         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-//         this.uploadProgress = parseInt(
-//           snapshot.bytesTransferred / snapshot.totalBytes * 100
-//         );
-//         console.log("Upload is " + this.uploadProgress + "% done");
-//       },
-//       error => {
-//         // Handle unsuccessful uploads
-//       },
-//       () => {
-//         // Handle successful uploads on complete
-//         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-//         console.log("snapshot", uploadTask.snapshot);
-//         var downloadURL = uploadTask.snapshot.downloadURL;
-//         // Add a new document with a generated id.
-//         var photoObj = {
-//           url: downloadURL,
-//           path: ref + "/" + photo.name,
-//           name: photo.name
-//         };
-//         db
-//           .collection(ref)
-//           .add(photoObj)
-//           .then(docRef => {
-//             this.listPhotos();
-//             console.log("Document written with ID: ", docRef.id);
-//           })
-//           .catch(error => {
-//             console.error("Error adding document: ", error);
-//           });
-//       }
-//     );
-//     this.uploadOn = false;
-//     this.uploadDialog = false;
-//     this.photosToUpload = [];
-//   });
-// },
-// cancelUpload() {
-//   this.uploadDialog = false;
-//   this.photosToUpload = [];
-// },
-// positionPhoto(photo, collection) {
-//   const docRef = db.collection(collection).doc(photo.id);
-//   docRef
-//     .set({
-//       id: photo.id,
-//       name: photo.name,
-//       path: photo.path,
-//       url: photo.url,
-//       position: photo.position
-//     })
-//     .then(doc => {
-//       this.cancelPosition();
-//     })
-//     .catch(() => {
-//       console.error("Error editing document: ", error);
-//     });
-// },
-// cancelPosition() {
-//   this.positionDialog = false;
-//   this.currentPhoto = {
-//     id: null,
-//     name: null,
-//     path: null,
-//     url: null,
-//     position: null
-//   };
-// },
-// startPosition(photo) {
-//   this.positionDialog = true;
-//   this.currentPhoto = photo;
-// },
-// deletePhoto(photo, collection) {
-//   if (confirm("Are you sure?")) {
-//     var desertRef = storageRef.child(photo.path);
-//     // Delete the file
-//     desertRef
-//       .delete()
-//       .then(function() {
-//         // File deleted successfully
-//       })
-//       .catch(function(error) {
-//         // Uh-oh, an error occurred!
-//       });
-//     db
-//       .collection(collection)
-//       .doc(photo.id)
-//       .delete()
-//       .then(data => {
-//         this.listPhotos();
-//         console.log("Document successfully deleted!");
-//       })
-//       .catch(error => {
-//         console.error("Error removing document: ", error);
-//       });
-//   }
-// },
-// openPreview() {
-//   this.previewDialog = true;
-// },
-// closePreview() {
-//   this.previewDialog = false;
-// }
 </script>
 
 <style scoped>
-.demo-card-square.mdl-card {
-	width: 320px;
-	height: 320px;
-	float: left;
-	margin: 1rem;
-	position: relative;
-}
 
-.demo-card-square.mdl-card:hover {
-	box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-		0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
-}
-
-.demo-card-square > .mdl-card__title {
-	color: #fff;
-	background: #03a9f4;
-}
-
-.demo-card-square > .mdl-card__accent {
-	background: #ff9800;
-}
-
-body {
-	padding: 20px;
-	background: #fafafa;
-	position: relative;
-}
 </style>
