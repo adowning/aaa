@@ -66,40 +66,39 @@ const AuthModule = {
         })
     },
   },
-  // signUserUp ({commit}, payload) {
-  //   commit('setLoading', true)
-  //   commit('clearError')
-  //   firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-  //     .then(
-  //       user => {
-  //         firebase.database().ref('users').child(user.uid).set({
-  //           name: payload.username
-  //         })
-  //           .then(
-  //             message => {
-  //               commit('setLoading', false)
-  //               const newUser = {
-  //                 id: user.uid,
-  //                 username: payload.username
-  //               }
-  //               commit('setUser', newUser)
-  //             }
-  //           )
-  //           .catch(
-  //             error => {
-  //               commit('setLoading', false)
-  //               commit('setError', error)
-  //             }
-  //           )
-  //       }
-  //     )
-  //     .catch(
-  //       error => {
-  //         commit('setLoading', false)
-  //         commit('setError', error)
-  //       }
-  //     )
-  // },
+  signUserUp({ commit }, payload) {
+    commit("setLoading", true)
+    commit("clearError")
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(payload.email, payload.password, emp_id)
+      .then(user => {
+        firebase
+          .database()
+          .ref("users")
+          .child(user.uid)
+          .set({
+            name: payload.username,
+          })
+          .then(message => {
+            commit("setLoading", false)
+            const newUser = {
+              id: user.uid,
+              username: payload.username,
+              emp_id: payload.emp_id,
+            }
+            commit("setUser", newUser)
+          })
+          .catch(error => {
+            commit("setLoading", false)
+            commit("setError", error)
+          })
+      })
+      .catch(error => {
+        commit("setLoading", false)
+        commit("setError", error)
+      })
+  },
   getters: {
     user(state) {
       return state.user

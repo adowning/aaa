@@ -8,11 +8,15 @@ export default [
   },
   {
     path: "/default",
-    component: () => import("layouts/default"),
+    component: () => import("components/default"),
     children: [
       {
         path: "/profile",
-        component: () => import("pages/Profile"),
+        component: () => import("components/Profile"),
+      },
+      {
+        path: "/liveview",
+        component: () => import("components/LiveView"),
       },
       {
         path: "/directory",
@@ -24,6 +28,6 @@ export default [
   {
     // Always leave this as last one
     path: "*",
-    component: () => import("pages/404"),
+    component: () => import("components/404"),
   },
 ]

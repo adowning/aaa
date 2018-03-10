@@ -7,12 +7,18 @@
     <feature name="Battery">
         <param name="android-package" value="org.apache.cordova.batterystatus.BatteryListener" />
     </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
+    <feature name="BackgroundGeolocation">
+        <param name="android-package" value="com.tenforwardconsulting.cordova.BackgroundGeolocationPlugin" />
+    </feature>
     <name>andrews-admin</name>
     <description>Administration app for Andrews</description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
+    <author email="ash@ashdevtools.com" href="http://ashdevtools.com">
         Apache Cordova Team
     </author>
-    <content src="index.html" />
+    <content src="http://192.168.1.8:8080/index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -20,6 +26,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="http://192.168.1.8:8080/index.html" />
     <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
 </widget>

@@ -38,6 +38,8 @@
             if (file.match(/\.(js|css)$/)) { %>
       <link rel="<%= chunk.initial ? 'preload' : 'prefetch' %>" href="<%= file %>" as="<%= file.match(/\.css$/)? 'style' : 'script' %>">
     <% }}}} %>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmwNvsV8ANcjbaAhgdrNhx39Qst6EUEeo"></script>
+
   </head>
   <body>
     <% if (!htmlWebpackPlugin.options.ctx.mode.electron) { %>

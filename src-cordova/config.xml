@@ -2,7 +2,7 @@
 <widget id="org.cordova.andrews.app" version="v0.1.02" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>andrews-admin</name>
     <description>Administration app for Andrews</description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
+    <author email="ash@ashdevtools.com" href="http://ashdevtools.com">
         Apache Cordova Team
     </author>
     <content src="index.html" />
@@ -21,6 +21,9 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="cordova-plugin-battery-status" spec="^2.0.1" />
     <engine name="android" spec="^7.0.0" />
+    <plugin name="cordova-plugin-battery-status" spec="^2.0.1" />
+    <plugin name="cordova-plugin-camera" spec="^4.0.2" />
+    <plugin name="cordova-plugin-mauron85-background-geolocation" spec="^2.3.3">
+    </plugin>
 </widget>
