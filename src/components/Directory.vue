@@ -113,6 +113,13 @@ export default {
 							// signed_docs: doc.data.signed_docs,
 						}
 						// console.log(data)
+						// console.log(doc.data.photoUrl)
+						console.log(doc.data().photoUrl)
+						if(!doc.data().photoUrl){
+							console.log('bad')
+						}else{
+							console.log('good')
+						}
 						this.employees.push(doc.data())
 					})
 				})
@@ -318,45 +325,46 @@ export default {
 					".jpg?alt=media"
 				var _fullname = value.first_name + " " + value.last_name
 				console.log(_userId)
-				db
-					.collection("employees")
-					.doc(_userId)
-					.set({
-						emp_id: _emp_id,
-						gender: "M",
-						work_email: _email,
-						marital_status: "s",
-						vet_type: null,
-						authorised_db_user: true,
-						cdl: false,
-						new_hire: false,
-						recent_date_of_hire: "01/01/2000",
-						user_name: _userId,
-						password: null,
-						first_name: value.first_name,
-						middle_initial: null,
-						last_name: value.last_name,
-						suffix: null,
-						preferred_name: _fullname,
-						full_name: _fullname,
-						other_lastnames: null,
-						date_of_birth: "03/06/1975",
-						mailing_address_line_1: "3654 Hanover Pl",
-						mailing_address_line_2: null,
-						zipcode: "75701",
-						state: "TX",
-						city: "Tyler",
-						cell_phone: value.cellPhone,
-						alt_phone: null,
-						home_fax: null,
-						home_email: null,
-						notes: [],
-						photoUrl: _photoUrl,
-						drivers_license_nbr: null,
-						position: value.position,
-						documents: [],
-						wage: value.wage,
-					})
+				// console.log(value.first_name,value.last_name,user_name,_email,cellPhone,position,'0001','0001')
+				// db
+				// 	.collection("employees")
+				// 	.doc(_userId)
+				// 	.set({
+				// 		emp_id: _emp_id,
+				// 		gender: "M",
+				// 		work_email: _email,
+				// 		marital_status: "s",
+				// 		vet_type: null,
+				// 		authorised_db_user: true,
+				// 		cdl: false,
+				// 		new_hire: false,
+				// 		recent_date_of_hire: "01/01/2000",
+				// 		user_name: _userId,
+				// 		password: null,
+				// 		first_name: value.first_name,
+				// 		middle_initial: null,
+				// 		last_name: value.last_name,
+				// 		suffix: null,
+				// 		preferred_name: _fullname,
+				// 		full_name: _fullname,
+				// 		other_lastnames: null,
+				// 		date_of_birth: "03/06/1975",
+				// 		mailing_address_line_1: "3654 Hanover Pl",
+				// 		mailing_address_line_2: null,
+				// 		zipcode: "75701",
+				// 		state: "TX",
+				// 		city: "Tyler",
+				// 		cell_phone: value.cellPhone,
+				// 		alt_phone: null,
+				// 		home_fax: null,
+				// 		home_email: null,
+				// 		notes: [],
+				// 		photoUrl: _photoUrl,
+				// 		drivers_license_nbr: null,
+				// 		position: value.position,
+				// 		documents: [],
+				// 		wage: value.wage,
+				// 	})
 			}
 		},
 		// resetNewService() {

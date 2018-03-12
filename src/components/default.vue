@@ -12,7 +12,7 @@
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>
-          Andrews Group
+          <!-- Andrews Group -->
           <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
         </q-toolbar-title>
         <q-search inverted v-model="search" color="none" value="x" class="q-mr-xl" />
@@ -24,21 +24,24 @@
     <q-layout-drawer
       v-model="leftDrawerOpen"
       content-class="bg-grey-2"
- 
     >
-     <div id="profile">
-       <div row>
+		<div >
+ <q-toolbar-title class="row justify-center q-mt-md" >
+          Andrews Group
+          <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
+        </q-toolbar-title>
+		</div>
+     <div id="profile" class="q-pl-xs">
+       <div row class="q-pt-lg">
   <img :src="user.photoURL" class="avatar img-thumbnail hidden-print inline-block" > 
-      <!--img src="../img/avatar-1.svg" id="avatar" class="inline-block"--> 
        </div>
-          <!-- <div id="user-name" v-bind:name="first_name" @error='logOut("Session expired")'>  -->
-        <span > {{user.username}}</span>
-        
-        <!-- <span > {{userIsAuthenticated}}</span> -->
-        <hr>
-        <span style="color: green"> Online </span>
-        <hr>
       </div>
+			<div class="row justify-center q-mt-md" >
+      <q-btn  size="sm" color="secondary" label="Profile" />
+			<p style="padding-left: 1em;"></p> 
+      <q-btn size="sm" color="secondary" label="Clock IN" />
+			</div>
+			<hr>
      <div row>
      <q-list no-border link >
       <q-item to="/liveview"  >
@@ -198,11 +201,14 @@ export default {
 
 <style scoped>
 img.avatar {
-	width: 75px;
-	height: 75px;
+	width: 100px;
+	height: 100px;
 	border-radius: 50%;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
 		0 2px 1px -1px rgba(0, 0, 0, 0.12);
-	vertical-align: middle;
+	vertical-align: bottom;
+}
+#profile {
+	height: 120px;
 }
 </style>
