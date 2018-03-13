@@ -1,0 +1,80 @@
+version: '2'
+services:
+  # Central Volumes Image
+  # volumes:
+  #   image: tianon/true
+  #   volumes:
+  #     # YouTransfer
+  #     - "./node-red/:/root/.node-red"
+
+  # # Central NGINX-Proxy
+  # proxy:
+  #   image: jwilder/nginx-proxy
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - "/var/run/docker.sock:/tmp/docker.sock:ro"
+  #   restart: always
+
+  mqtt:
+    image: eclipse-mosquitto:latest
+    restart: always
+    ports:
+    - "1883:1883"
+    - "9001:9001"
+    volumes:
+    - ./mqtt/config:/mosquitto/config
+    - ./mqtt/data:/mosquitto/data
+    - ./mqtt/log:/mosquitto/log
+  # collectd:
+  #   image: fr3nd/collectd
+  #   privileged: true
+  #   network_mode: host
+  #   volumes:
+  #     - /proc:/mnt/proc:ro
+  #     - ./collectd.conf:/etc/collectd/collectd.conf
+  netdata:
+    image: titpetric/netdata:latest
+    cap_add:
+    - SYS_PTRACE
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    environment:
+      NETDATA_PORT: 19999
+
+  influxdb:
+    image: influxdb:1.0
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "25826:25826/udp"
+    volumes:
+      - /var/lib/influxdb
+      - ./influxdb.conf:/etc/influxdb/influxdb.conf
+      - ./types.db:/usr/share/collectd/types.db:ro
+  grafana:
+    image: grafana/grafana:3.1.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/lib/grafana
+  # nodered:
+  #   image: nodered/node-red-docker
+  #   ports:
+  #     - "1880:1880"
+  #   volumes:
+  #     - ~/.node-red:/data
+    # Node-Red
+  nodered:
+    image: beevelop/node-red
+    environment:
+      - VIRTUAL_HOST=ashdevtools.com
+      - VIRTUAL_PORT=1880
+    ports:
+      - "1880:1880"
+    # volumes_from:
+      # - "volumes"
+    volumes:
+    - "./node-red/:/root/.node-red"
+    # restart: always

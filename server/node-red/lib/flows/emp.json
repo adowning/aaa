@@ -1,0 +1,236 @@
+[
+    {
+        "id": "cd6b487d.b9d3c8",
+        "type": "debug",
+        "z": "1a3a14de.d6226b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 710,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "7d3707f8.7c4908",
+        "type": "http response",
+        "z": "1a3a14de.d6226b",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "token": "89baa4d77fde8740da6e1e716595a198"
+        },
+        "x": 980,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "72cc4c46.6ee0a4",
+        "type": "http request",
+        "z": "1a3a14de.d6226b",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/start",
+        "tls": "",
+        "x": 510,
+        "y": 400,
+        "wires": [
+            [
+                "cd6b487d.b9d3c8"
+            ]
+        ]
+    },
+    {
+        "id": "43eaffad.f321c",
+        "type": "http response",
+        "z": "1a3a14de.d6226b",
+        "name": "clock in",
+        "statusCode": "",
+        "headers": {},
+        "x": 560,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "1fba7cd0.749ac3",
+        "type": "http request",
+        "z": "1a3a14de.d6226b",
+        "name": "Timesheet Pause",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/pause",
+        "tls": "",
+        "x": 730,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "753e3250.73df5c",
+        "type": "inject",
+        "z": "1a3a14de.d6226b",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 100,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d300dd0a.529a4",
+        "type": "function",
+        "z": "1a3a14de.d6226b",
+        "name": "add data and headers",
+        "func": "msg.payload = {'intTimesheetId': 3};\n msg.headers = {\n         \"Content-type\" : \"application/json\",\n         \"Accept\": \"application/json\",\n         \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE0ZWQxM2I3ZDM1YmMxMjlkODliYmNmYTE0YjMwNDhmNWVlNzhhMTMyNGJlMjNmYTA0YzBhNTQ3MDMwOWJhMDk5NzE2NDEyNDFmNzhlNjE2In0.eyJhdWQiOiIxIiwianRpIjoiYTRlZDEzYjdkMzViYzEyOWQ4OWJiY2ZhMTRiMzA0OGY1ZWU3OGExMzI0YmUyM2ZhMDRjMGE1NDcwMzA5YmEwOTk3MTY0MTI0MWY3OGU2MTYiLCJpYXQiOjE1MjA4MDY4MzYsIm5iZiI6MTUyMDgwNjgzNiwiZXhwIjoxNTUyMzQyODM2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cISnHSrYIPwbJ_dPQBoJ5rrdaemZIbYLSb2Ey6a5MT3q_UnMN2gbCJbX2U8JnsvYfEaV7GjpH4hVifRDSyGxeEIgTrXBUld32atlAcMMvVVGyODDm_q7y7oBFuANLXRKJa0uv3Hh-Gr3Kmk02DGuzlLkEdOiz5gK53NclLdNk4Mb2cQ65b17RmipsZvljMjElvaLE1O5TJfxoJ0RT6PBalIZGVqPZ3BA4yLViL5f27qWIWuPkbVXoPDngcOEJ1RCtiFkxiSFtmf2fzXCafIGEZugp0XCnfHJi7S1sCWDeILvb-V8muXS_yRirSkoIdKbEgCtlvRE826jRoOYuMOzucGc61Uyat1LRV8CWSGa_SoBKkLosP84LRGZehu_X3OHYAtkpwaVR9Q5rEj-EqdnxkcuKEf2YE8YdxTEVetPxTGUwRXd4rKmF4YACz9ILB-n2OZ_l4o-hguT9ZMjpQ3glmHLzTXKRW441bPtaU-z0fNyXHMCpFOKbKvkGxMGDvJ3BXFL2221VDm8PZZ7iMsftCPT8ifErMiQt__YH0Fu4MaVQ3vvRtrNSZYw3WbDMPZ9SUcdQabzLH5jx-iFWuh-ESbcv9CJ2tb7sLJ0yEScFLtVtIJg1ymO2h5pYvlLQOSCNdDYc3MNBkgo3au0VPdXvL_hpm3Rfv3szS3w7UxAupE\"\n     \n }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 300,
+        "y": 400,
+        "wires": [
+            [
+                "72cc4c46.6ee0a4"
+            ]
+        ]
+    },
+    {
+        "id": "c6e1205d.1d449",
+        "type": "http request",
+        "z": "1a3a14de.d6226b",
+        "name": "Timesheet End",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/{{action}}/",
+        "tls": "",
+        "x": 720,
+        "y": 140,
+        "wires": [
+            [
+                "7d3707f8.7c4908"
+            ]
+        ]
+    },
+    {
+        "id": "ff2a8435.f300e8",
+        "type": "http in",
+        "z": "1a3a14de.d6226b",
+        "name": "Timeclock Action",
+        "url": "/api/deputy/timeclock/{{action}}",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "765f7a4b.5f5724"
+            ]
+        ]
+    },
+    {
+        "id": "f27afa2f.f2cf68",
+        "type": "http request",
+        "z": "1a3a14de.d6226b",
+        "name": "Timesheet Start",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/start/",
+        "tls": "",
+        "x": 720,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "765f7a4b.5f5724",
+        "type": "function",
+        "z": "1a3a14de.d6226b",
+        "name": "Construct Message",
+        "func": "console.log('received timeclock action ', msg.action)\nconsole.log('received timeclock department ', msg.dept)\nconsole.log('setting headers')\nmsg.headers = {};\nmsg.headers['Authorization'] = 'OAuth 89baa4d77fde8740da6e1e716595a198';\nmsg.headers['Accept'] = 'application/json';\n\nvar msg1 = { payload:\"\" };\nvar msg2 = { payload:\"\" };\n\nif(msg.action == ('break' || 'clockout')){\n    msg1.payload = {'intTimesheetId': context.get('activesheet', activeTimesheet).flow};\n\n}else{\n    msg2.payload = {'intEmployeeId': msg.empId, 'department': msg.dept};\n\n}\n// msg.payload = {'intEmployeeId': 408, 'intOpunitId': 3};\n// msg.payload = {'intTimesheetId': context.get('employeeActiveTimesheetId', empActivetTSId).flow};\n\n\n\nreturn [msg1, msg2];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "e153fee3.0715e",
+        "type": "function",
+        "z": "1a3a14de.d6226b",
+        "name": "set auth header",
+        "func": "msg.payload = {};\n// msg.payload = {'intEmployeeId': 408, 'intOpunitId': 3};\nmsg.payload = {'intTimesheetId': context.get('employeeActiveTimesheetId', empActivetTSId).flow};\nmsg.headers = {};\nmsg.headers['Authorization'] = 'OAuth 89baa4d77fde8740da6e1e716595a198';\nmsg.headers['Accept'] = 'application/json';\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f15802d.47e6c",
+        "type": "function",
+        "z": "1a3a14de.d6226b",
+        "name": "Set payload start clock",
+        "func": "msg.payload = {};\nmsg.payload = {'intEmployeeId': msg.payload.empId, 'intOpunitId': msg.payload.dept};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 520,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea49f3f1.71a8c",
+        "type": "switch",
+        "z": "1a3a14de.d6226b",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 930,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2df04562.cdc77a",
+        "type": "http request",
+        "z": "1a3a14de.d6226b",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    }
+]

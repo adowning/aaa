@@ -1,0 +1,20 @@
+{
+  "name": "node-red-project",
+  "description": "A Node-RED Project",
+  "version": "0.0.1",
+  "dependencies": {
+    "node-red-contrib-config": "~1.1.2",
+    "node-red-contrib-contextbrowser": "0.0.4",
+    "node-red-contrib-firebase": "~1.1.1",
+    "node-red-contrib-globalgetset": "~2.0.3",
+    "node-red-contrib-google-firebase": "0.0.7",
+    "node-red-contrib-influxdb": "~0.2.1",
+    "node-red-contrib-mqtt-broker": "~0.2.3",
+    "node-red-contrib-persist": "~1.0.3",
+    "node-red-contrib-uibuilder": "~1.0.6",
+    "node-red-contrib-web-worldmap": "~1.1.9",
+    "node-red-firebase": "~0.1.0",
+    "node-red-node-pushover": "0.0.11",
+    "ttb-node-owntracks": "0.0.4"
+  }
+}

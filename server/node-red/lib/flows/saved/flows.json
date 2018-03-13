@@ -1,0 +1,15 @@
+[
+    {
+        "id": "7d3707f8.7c4908",
+        "type": "http response",
+        "z": "1a3a14de.d6226b",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "token": "89baa4d77fde8740da6e1e716595a198"
+        },
+        "x": 960,
+        "y": 280,
+        "wires": []
+    }
+]

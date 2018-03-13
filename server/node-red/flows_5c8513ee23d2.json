@@ -1,0 +1,353 @@
+[
+    {
+        "id": "6bd669f2.cda078",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "2c90f9.325d0f08",
+        "type": "debug",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 850,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "24bdf6c1.fc2eaa",
+        "type": "http response",
+        "z": "6bd669f2.cda078",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "token": "89baa4d77fde8740da6e1e716595a198"
+        },
+        "x": 1140,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "5104e72e.d34478",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/start",
+        "tls": "",
+        "x": 670,
+        "y": 560,
+        "wires": [
+            [
+                "2c90f9.325d0f08"
+            ]
+        ]
+    },
+    {
+        "id": "a63124da.3c7438",
+        "type": "http response",
+        "z": "6bd669f2.cda078",
+        "name": "clock in",
+        "statusCode": "",
+        "headers": {},
+        "x": 720,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "a484786a.29c0c8",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "Timesheet Pause",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/pause",
+        "tls": "",
+        "x": 890,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "703224a0.cdab9c",
+        "type": "inject",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 260,
+        "y": 180,
+        "wires": [
+            [
+                "aaa5c381.c7eca"
+            ]
+        ]
+    },
+    {
+        "id": "8bdf4d.8f84c0b",
+        "type": "function",
+        "z": "6bd669f2.cda078",
+        "name": "add data and headers",
+        "func": "msg.payload = {'intTimesheetId': 3};\n msg.headers = {\n         \"Content-type\" : \"application/json\",\n         \"Accept\": \"application/json\",\n         \"Authorization\": \"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE0ZWQxM2I3ZDM1YmMxMjlkODliYmNmYTE0YjMwNDhmNWVlNzhhMTMyNGJlMjNmYTA0YzBhNTQ3MDMwOWJhMDk5NzE2NDEyNDFmNzhlNjE2In0.eyJhdWQiOiIxIiwianRpIjoiYTRlZDEzYjdkMzViYzEyOWQ4OWJiY2ZhMTRiMzA0OGY1ZWU3OGExMzI0YmUyM2ZhMDRjMGE1NDcwMzA5YmEwOTk3MTY0MTI0MWY3OGU2MTYiLCJpYXQiOjE1MjA4MDY4MzYsIm5iZiI6MTUyMDgwNjgzNiwiZXhwIjoxNTUyMzQyODM2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.cISnHSrYIPwbJ_dPQBoJ5rrdaemZIbYLSb2Ey6a5MT3q_UnMN2gbCJbX2U8JnsvYfEaV7GjpH4hVifRDSyGxeEIgTrXBUld32atlAcMMvVVGyODDm_q7y7oBFuANLXRKJa0uv3Hh-Gr3Kmk02DGuzlLkEdOiz5gK53NclLdNk4Mb2cQ65b17RmipsZvljMjElvaLE1O5TJfxoJ0RT6PBalIZGVqPZ3BA4yLViL5f27qWIWuPkbVXoPDngcOEJ1RCtiFkxiSFtmf2fzXCafIGEZugp0XCnfHJi7S1sCWDeILvb-V8muXS_yRirSkoIdKbEgCtlvRE826jRoOYuMOzucGc61Uyat1LRV8CWSGa_SoBKkLosP84LRGZehu_X3OHYAtkpwaVR9Q5rEj-EqdnxkcuKEf2YE8YdxTEVetPxTGUwRXd4rKmF4YACz9ILB-n2OZ_l4o-hguT9ZMjpQ3glmHLzTXKRW441bPtaU-z0fNyXHMCpFOKbKvkGxMGDvJ3BXFL2221VDm8PZZ7iMsftCPT8ifErMiQt__YH0Fu4MaVQ3vvRtrNSZYw3WbDMPZ9SUcdQabzLH5jx-iFWuh-ESbcv9CJ2tb7sLJ0yEScFLtVtIJg1ymO2h5pYvlLQOSCNdDYc3MNBkgo3au0VPdXvL_hpm3Rfv3szS3w7UxAupE\"\n     \n }\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 460,
+        "y": 560,
+        "wires": [
+            [
+                "5104e72e.d34478"
+            ]
+        ]
+    },
+    {
+        "id": "bde547a0.7f9178",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "Timesheet End",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/{{action}}/",
+        "tls": "",
+        "x": 880,
+        "y": 300,
+        "wires": [
+            [
+                "24bdf6c1.fc2eaa"
+            ]
+        ]
+    },
+    {
+        "id": "bb377c14.367b2",
+        "type": "http in",
+        "z": "6bd669f2.cda078",
+        "name": "Timeclock Action",
+        "url": "/api/deputy/timeclock/",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 280,
+        "y": 300,
+        "wires": [
+            [
+                "3fd490f3.1415d",
+                "b95c1f56.650a5"
+            ]
+        ]
+    },
+    {
+        "id": "8f5954ff.f94768",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "Timesheet Start",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/start/",
+        "tls": "",
+        "x": 880,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3fd490f3.1415d",
+        "type": "function",
+        "z": "6bd669f2.cda078",
+        "name": "Construct Message",
+        "func": "// console.log('received timeclock action ', msg.action)\n// console.log('received timeclock department ', msg.dept)\n// console.log('setting headers')\nmsg.headers = {};\nmsg.headers['Authorization'] = 'OAuth 89baa4d77fde8740da6e1e716595a198';\nmsg.headers['Accept'] = 'application/json';\n\n// // var msg1 = { payload:\"\" };\n// // var msg2 = { payload:\"\" };\nconsole.log(msg.payload.action)\nif(msg.payload.action == ('break' || 'clockout')){\n    msg.payload = {'intTimesheetId': context.get('activesheet', activeTimesheet).flow};\n    \n}else{\n    // msg.payload = {'intEmployeeId': msg.empId, 'department': msg.dept};\nnode.log('hihihihihi')\n}\nmsg.query = msg.payload.action\n// return msg;\nnode.log('hihihihihi')\nnode.warn(msg.payload)\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430,
+        "y": 340,
+        "wires": [
+            [
+                "c470854d.dc00e8",
+                "d3114186.c609d"
+            ]
+        ]
+    },
+    {
+        "id": "d18a43b7.f7a7d",
+        "type": "function",
+        "z": "6bd669f2.cda078",
+        "name": "set auth header",
+        "func": "msg.payload = {};\n// msg.payload = {'intEmployeeId': 408, 'intOpunitId': 3};\nmsg.payload = {'intTimesheetId': context.get('employeeActiveTimesheetId', empActivetTSId).flow};\nmsg.headers = {};\nmsg.headers['Authorization'] = 'OAuth 89baa4d77fde8740da6e1e716595a198';\nmsg.headers['Accept'] = 'application/json';\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 660,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "841e63ca.0259a",
+        "type": "function",
+        "z": "6bd669f2.cda078",
+        "name": "Set payload start clock",
+        "func": "msg.payload = {};\nmsg.payload = {'intEmployeeId': msg.payload.empId, 'intOpunitId': msg.payload.dept};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 680,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f28c0b7f.171d78",
+        "type": "switch",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1090,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aaa5c381.c7eca",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "http://172.17.0.3:1880/api/deputy/timeclock/",
+        "tls": "",
+        "x": 310,
+        "y": 240,
+        "wires": [
+            [
+                "3be71a3e.890b86"
+            ]
+        ]
+    },
+    {
+        "id": "c710b697.53f7b8",
+        "type": "inject",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 230,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3be71a3e.890b86",
+        "type": "debug",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 490,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b95c1f56.650a5",
+        "type": "debug",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 290,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "c470854d.dc00e8",
+        "type": "http request",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/{{query}}/",
+        "tls": "",
+        "x": 630,
+        "y": 340,
+        "wires": [
+            [
+                "a7d20d2f.92dd5",
+                "bdc72432.9cc378"
+            ]
+        ]
+    },
+    {
+        "id": "a7d20d2f.92dd5",
+        "type": "debug",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 660,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "bdc72432.9cc378",
+        "type": "http response",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 720,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d3114186.c609d",
+        "type": "debug",
+        "z": "6bd669f2.cda078",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 540,
+        "y": 420,
+        "wires": []
+    }
+]

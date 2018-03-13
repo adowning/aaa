@@ -1,0 +1,1222 @@
+[
+    {
+        "id": "d7089891.0cb2d8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d7177b13.fbd048",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "94162d4b.719dd",
+        "type": "tab",
+        "label": "Sheet 1",
+        "disabled": true,
+        "info": ""
+    },
+    {
+        "id": "e93f3548.674138",
+        "type": "influxdb",
+        "z": "",
+        "hostname": "172.19.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "testdb",
+        "name": "",
+        "usetls": false,
+        "tls": ""
+    },
+    {
+        "id": "445f1b82.677364",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "47.219.112.177",
+        "broker": "172.17.0.1",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    },
+    {
+        "id": "f189b2f0.9fa58",
+        "type": "firebase config",
+        "z": "",
+        "firebaseurl": "andrewsadmin",
+        "loginType": "none"
+    },
+    {
+        "id": "e57fe698.e814b8",
+        "type": "http response",
+        "z": "d7089891.0cb2d8",
+        "name": "response",
+        "statusCode": "200",
+        "headers": {
+            "token": "89baa4d77fde8740da6e1e716595a198"
+        },
+        "x": 1120,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "e49fa78a.8188b8",
+        "type": "http response",
+        "z": "d7089891.0cb2d8",
+        "name": "clock in",
+        "statusCode": "",
+        "headers": {},
+        "x": 1260,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "7354b8a8.1784e8",
+        "type": "http request",
+        "z": "d7089891.0cb2d8",
+        "name": "Timesheet Pause",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/pause",
+        "tls": "",
+        "x": 1230,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "508a9238.8783ac",
+        "type": "inject",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "topic": "",
+        "payload": "{\"intTimesheetId\":1,\"intEmployeeId\":1,\"action\":\"break\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 90,
+        "y": 20,
+        "wires": [
+            [
+                "2320a6e0.a4f0fa"
+            ]
+        ]
+    },
+    {
+        "id": "dfa35bf3.51a0b8",
+        "type": "http request",
+        "z": "d7089891.0cb2d8",
+        "name": "Timesheet End",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/{{action}}/",
+        "tls": "",
+        "x": 1180,
+        "y": 120,
+        "wires": [
+            [
+                "e57fe698.e814b8"
+            ]
+        ]
+    },
+    {
+        "id": "3ea0dc97.d188c4",
+        "type": "http in",
+        "z": "d7089891.0cb2d8",
+        "name": "Timeclock Action",
+        "url": "/api/deputy/timesheet/",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "b568d16d.5290b"
+            ]
+        ]
+    },
+    {
+        "id": "afcde261.73a74",
+        "type": "http request",
+        "z": "d7089891.0cb2d8",
+        "name": "Timesheet Start",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/start/",
+        "tls": "",
+        "x": 1200,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b568d16d.5290b",
+        "type": "function",
+        "z": "d7089891.0cb2d8",
+        "name": "Construct Message",
+        "func": "// console.log('received timeclock action ', msg.action)\n// console.log('received timeclock department ', msg.dept)\n// console.log('setting headers')\nmsg.headers = {};\nmsg.headers['Authorization'] = 'OAuth 89baa4d77fde8740da6e1e716595a198';\nmsg.headers['Accept'] = 'application/json';\n\n// // var msg1 = { payload:\"\" };\n// // var msg2 = { payload:\"\" };\nconsole.log(msg.payload.action)\nif(msg.payload.action == ('break' || 'clockout')){\n    msg.payload = {'intTimesheetId': context.get('activesheet', msg.payload.action).flow};\n    \n}else{\n    // msg.payload = {'intEmployeeId': msg.empId, 'department': msg.dept};\nnode.log('hihihihihi')\n}\nmsg.query = msg.payload.action\n// return msg;\nnode.log('hihihihihi')\nnode.warn(msg.payload)\nreturn msg",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 270,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "983989b5.6f4248",
+        "type": "switch",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1070,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2320a6e0.a4f0fa",
+        "type": "http request",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "http://172.17.0.3:1880/api/deputy/timeclock/",
+        "tls": "",
+        "x": 270,
+        "y": 20,
+        "wires": [
+            [
+                "40995f2.7f43fa"
+            ]
+        ]
+    },
+    {
+        "id": "a647e58c.1f23a8",
+        "type": "http request",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://054b6b12055851.na.deputy.com/api/v1/supervise/timesheet/{{query}}/",
+        "tls": "",
+        "x": 590,
+        "y": 80,
+        "wires": [
+            [
+                "5cdbec92.980454"
+            ]
+        ]
+    },
+    {
+        "id": "5cdbec92.980454",
+        "type": "http response",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "259eb69c.6a1caa",
+        "type": "influxdb out",
+        "z": "d7177b13.fbd048",
+        "influxdb": "e93f3548.674138",
+        "name": "location",
+        "measurement": "location_update",
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 760,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "54cd80e7.99bbd",
+        "type": "influxdb in",
+        "z": "d7177b13.fbd048",
+        "influxdb": "e93f3548.674138",
+        "name": "",
+        "query": "SELECT * FROM location_update;",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "9c89fce1.43b3e"
+            ]
+        ]
+    },
+    {
+        "id": "9c89fce1.43b3e",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "from database",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 580,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "4f4b5813.985728",
+        "type": "inject",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 240,
+        "y": 360,
+        "wires": [
+            [
+                "54cd80e7.99bbd"
+            ]
+        ]
+    },
+    {
+        "id": "d6b0ea45.6a0da8",
+        "type": "switch",
+        "z": "d7177b13.fbd048",
+        "name": "is location",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "location",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 380,
+        "y": 200,
+        "wires": [
+            [
+                "7787db7a.42fff4"
+            ]
+        ]
+    },
+    {
+        "id": "8da5ba19.e2d6d8",
+        "type": "catch",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "scope": [],
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "44d2c4a7.daa0ec"
+            ]
+        ]
+    },
+    {
+        "id": "44d2c4a7.daa0ec",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 360,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "7787db7a.42fff4",
+        "type": "json",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "2f3f19f4.fd01b6"
+            ]
+        ]
+    },
+    {
+        "id": "2f3f19f4.fd01b6",
+        "type": "function",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "func": "var oldValue = msg.payload\n\nserverTime = new Date()\n// var newMsg = msg\n// var msgInflux = msg\nvar fbMsg = { payload:{\n    tabletId: oldValue.tid,\n    speed: oldValue.acc,\n    batt: oldValue.batt,\n    dir: oldValue.conn,\n    lat: oldValue.lat,\n    lng: oldValue.lon,\n    clientTime: serverTime.toString(),\n}\n}\nvar fluxMsg = { payload:\n[{\n    tabletId: oldValue.tid,\n    speed: oldValue.acc,\n    batt: oldValue.batt,\n    dir: oldValue.conn,\n    lat: oldValue.lat,\n    lng: oldValue.lon,\n    clientTime: serverTime.toString(),\n    time: new Date(\"2015-12-28T19:41:13Z\").getTime()\n},\n    {\n        tag1:\"location\",\n        tag2: oldValue.tid\n    }\n]\n}\n node.warn(fluxMsg.payload)\n node.warn(fbMsg.payload)\n\n\n\nreturn [fluxMsg, fbMsg];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 690,
+        "y": 220,
+        "wires": [
+            [
+                "ac88a50d.443ce8",
+                "259eb69c.6a1caa"
+            ],
+            [
+                "4d4b3fbf.20a64"
+            ]
+        ],
+        "outputLabels": [
+            "influx",
+            "firebase"
+        ]
+    },
+    {
+        "id": "66b08962.a38f98",
+        "type": "json",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": false,
+        "x": 870,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4d4b3fbf.20a64",
+        "type": "firebase modify",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "firebaseconfig": "f189b2f0.9fa58",
+        "childpath": "tablet_locations",
+        "method": "push",
+        "value": "msg.payload",
+        "priority": "",
+        "x": 1060,
+        "y": 140,
+        "wires": [
+            [
+                "598ec5ee.cc39ec"
+            ]
+        ]
+    },
+    {
+        "id": "b7e862ad.92c59",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1240,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "598ec5ee.cc39ec",
+        "type": "uibuilder",
+        "z": "d7177b13.fbd048",
+        "name": "default_ui",
+        "topic": "owntracks",
+        "url": "uibuilder",
+        "fwdInMessages": true,
+        "allowScripts": true,
+        "allowStyles": true,
+        "debugFE": true,
+        "copyIndex": true,
+        "x": 1060,
+        "y": 300,
+        "wires": [
+            [
+                "b7e862ad.92c59"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "77ba59bd.093288",
+        "type": "inject",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "topic": "owntracks",
+        "payload": "adsf",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 300,
+        "y": 640,
+        "wires": [
+            [
+                "83475d40.78a5e"
+            ]
+        ]
+    },
+    {
+        "id": "83475d40.78a5e",
+        "type": "mqtt out",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "topic": "owntracks",
+        "qos": "",
+        "retain": "",
+        "broker": "445f1b82.677364",
+        "x": 510,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "fe4fca19.a89458",
+        "type": "mqtt in",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "topic": "owntracks",
+        "qos": "2",
+        "broker": "445f1b82.677364",
+        "x": 260,
+        "y": 560,
+        "wires": [
+            [
+                "8e56a5db.c7fe28"
+            ]
+        ]
+    },
+    {
+        "id": "8e56a5db.c7fe28",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 410,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "1491ecfe.448ea3",
+        "type": "mqtt in",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "topic": "owntracks",
+        "qos": "2",
+        "broker": "445f1b82.677364",
+        "x": 210,
+        "y": 200,
+        "wires": [
+            [
+                "d6b0ea45.6a0da8"
+            ]
+        ]
+    },
+    {
+        "id": "7733c9e0.f2c728",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 890,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ac88a50d.443ce8",
+        "type": "debug",
+        "z": "d7177b13.fbd048",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 590,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "40995f2.7f43fa",
+        "type": "debug",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 460,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "38e3964f.46ad0a",
+        "type": "firebase.on",
+        "z": "d7089891.0cb2d8",
+        "name": "get ",
+        "firebaseconfig": "f189b2f0.9fa58",
+        "childpath": "",
+        "atStart": true,
+        "eventType": "value",
+        "queries": [
+            {
+                "name": "equalTo",
+                "value": ""
+            }
+        ],
+        "x": 450,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5be6d94.eac47",
+        "type": "debug",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "active": true,
+        "console": "true",
+        "complete": "false",
+        "x": 594,
+        "y": 127,
+        "wires": []
+    },
+    {
+        "id": "ddcac693.3c6488",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "payload = \"test/c\"",
+        "topic": "",
+        "payload": "test/c",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 194.5714569091797,
+        "y": 516.7142810821533,
+        "wires": [
+            [
+                "9c10f333.bfcd9"
+            ]
+        ]
+    },
+    {
+        "id": "4b706430.90a3fc",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"purple\"",
+        "topic": "",
+        "payload": "purple",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 193.5714569091797,
+        "y": 634.7142810821533,
+        "wires": [
+            [
+                "3a422419.b96dfc"
+            ]
+        ]
+    },
+    {
+        "id": "3a422419.b96dfc",
+        "type": "change",
+        "z": "94162d4b.719dd",
+        "name": "msg.path = \"test/a\"",
+        "action": "replace",
+        "property": "path",
+        "from": "",
+        "to": "test/a",
+        "reg": false,
+        "x": 449.2637710571289,
+        "y": 634.7142658233643,
+        "wires": [
+            [
+                "9e061234.63763"
+            ]
+        ]
+    },
+    {
+        "id": "bda4bf5a.6ad4f",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"green\"",
+        "topic": "",
+        "payload": "green",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 193.5714569091797,
+        "y": 672.7142810821533,
+        "wires": [
+            [
+                "3a422419.b96dfc"
+            ]
+        ]
+    },
+    {
+        "id": "35142fa1.c5bc7",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "payload = \"test/a\"",
+        "topic": "",
+        "payload": "test/a",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 193.5714569091797,
+        "y": 443.7142810821533,
+        "wires": [
+            [
+                "9c10f333.bfcd9"
+            ]
+        ]
+    },
+    {
+        "id": "80d1234a.589bc",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "payload = \"test/b\"",
+        "topic": "",
+        "payload": "test/b",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 192.5714569091797,
+        "y": 479.7142810821533,
+        "wires": [
+            [
+                "9c10f333.bfcd9"
+            ]
+        ]
+    },
+    {
+        "id": "b3d8fb2e.d08178",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"orange\"",
+        "topic": "",
+        "payload": "orange",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 189.5714569091797,
+        "y": 709.7142810821533,
+        "wires": [
+            [
+                "f9e18861.07ada8"
+            ]
+        ]
+    },
+    {
+        "id": "ce744815.2b41b8",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"blue\"",
+        "topic": "",
+        "payload": "blue",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 197.5714569091797,
+        "y": 746.7142810821533,
+        "wires": [
+            [
+                "f9e18861.07ada8"
+            ]
+        ]
+    },
+    {
+        "id": "e976f15f.3b996",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "This Watch node generates messages when any value under \"/test\" changes.",
+        "info": "",
+        "x": 402,
+        "y": 79,
+        "wires": []
+    },
+    {
+        "id": "dd67f277.2e67e",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 249.2857780456543,
+        "y": 1098.2855920791626,
+        "wires": [
+            [
+                "f0008b50.29c8d8"
+            ]
+        ]
+    },
+    {
+        "id": "5dd3c4a2.cf92ec",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "This flow removes the whole list",
+        "info": "",
+        "x": 408.5714569091797,
+        "y": 1061.7142810821533,
+        "wires": []
+    },
+    {
+        "id": "661733ab.0bb4cc",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "This flow will set values at \"/test/a\" or \"/test/b\" using a dynamic path",
+        "info": "",
+        "x": 414.5714569091797,
+        "y": 591.7142810821533,
+        "wires": []
+    },
+    {
+        "id": "45d8d780.9c4638",
+        "type": "debug",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "active": true,
+        "console": "true",
+        "complete": "false",
+        "x": 604.5714569091797,
+        "y": 479.7142810821533,
+        "wires": []
+    },
+    {
+        "id": "3ff4eb42.f4fe64",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "This flow retreives values from specific fields under \"/test\"",
+        "info": "",
+        "x": 408.5714569091797,
+        "y": 400.7142810821533,
+        "wires": []
+    },
+    {
+        "id": "3f3e4875.eaf318",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "This flow will set some data at \"/test\"",
+        "info": "",
+        "x": 398,
+        "y": 184,
+        "wires": []
+    },
+    {
+        "id": "2d47dee.071e122",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "topic": "",
+        "payload": "{\"a\":\"one\", \"b\":\"two\", \"c\":\"three\"}",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 179,
+        "y": 235,
+        "wires": [
+            [
+                "f5207b9e.7a34e8"
+            ]
+        ]
+    },
+    {
+        "id": "f5207b9e.7a34e8",
+        "type": "json",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "x": 413,
+        "y": 235,
+        "wires": [
+            [
+                "efa81b5d.6b4608"
+            ]
+        ]
+    },
+    {
+        "id": "39577592.85f7da",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "DOUBLE CLICK ME FIRST!",
+        "info": "Firebase is an online, real-time, RESTful data store you\ncan use for free.  These Firebase nodes are designed to \nmake working with your Firebase in Node-RED easy and\nsimple.\n\nTo use these demo flows, you'll want to register for your \nown Firebase and then edit all of the Firebase nodes below \nto add your Firebase address.\n\nPlease read more at Firebase.com!\n\nYou can use the flows that follow to experiment with your \nFirebase and see how the various Firebase nodes work!\n\nThis will make the most sense if you open another browser \nwindow at https://<your-firebase>.firebaseio.com and watch \nthe data change live.",
+        "x": 396,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "efa81b5d.6b4608",
+        "type": "firebase modify",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "method": "set",
+        "x": 606.2000122070312,
+        "y": 234.1999969482422,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0008b50.29c8d8",
+        "type": "firebase modify",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "method": "remove",
+        "x": 621.0792083740234,
+        "y": 1098.6835193634033,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "389d0753.f3a8b8",
+        "type": "firebase modify",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "firebaseconfig": "f189b2f0.9fa58",
+        "childpath": "",
+        "method": "push",
+        "value": "",
+        "priority": "",
+        "x": 740.1099700927734,
+        "y": 939.0989246368408,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9e061234.63763",
+        "type": "firebase modify",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "firebaseconfig": "f189b2f0.9fa58",
+        "childpath": "",
+        "method": "set",
+        "value": "",
+        "priority": "",
+        "x": 789.1868133544922,
+        "y": 634.3296375274658,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f9e18861.07ada8",
+        "type": "change",
+        "z": "94162d4b.719dd",
+        "name": "msg.path = \"test/b\"",
+        "action": "replace",
+        "property": "path",
+        "from": "",
+        "to": "test/b",
+        "reg": false,
+        "x": 449.18687438964844,
+        "y": 709.1758289337158,
+        "wires": [
+            [
+                "9e061234.63763"
+            ]
+        ]
+    },
+    {
+        "id": "bf25f338.b419f",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"purple\"",
+        "topic": "",
+        "payload": "purple",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 288.7714538574219,
+        "y": 885.5142688751221,
+        "wires": [
+            [
+                "389d0753.f3a8b8"
+            ]
+        ]
+    },
+    {
+        "id": "2a46aa08.967016",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"green\"",
+        "topic": "",
+        "payload": "green",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 288.7714538574219,
+        "y": 923.5142688751221,
+        "wires": [
+            [
+                "389d0753.f3a8b8"
+            ]
+        ]
+    },
+    {
+        "id": "4d30e5bc.b7c02c",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"orange\"",
+        "topic": "",
+        "payload": "orange",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 284.7714538574219,
+        "y": 960.5142688751221,
+        "wires": [
+            [
+                "389d0753.f3a8b8"
+            ]
+        ]
+    },
+    {
+        "id": "3d3dc3d0.6385cc",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "msg.payload = \"blue\"",
+        "topic": "",
+        "payload": "blue",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 292.7714538574219,
+        "y": 997.5142688751221,
+        "wires": [
+            [
+                "389d0753.f3a8b8"
+            ]
+        ]
+    },
+    {
+        "id": "a6044598.5a91c8",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "We can also add values to a list, even with duplicates!",
+        "info": "",
+        "x": 429.77146911621094,
+        "y": 802.5142688751221,
+        "wires": []
+    },
+    {
+        "id": "b4ae9ea5.547e4",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "Make sure to watch your Firebase in another window to see how this works, it's a little different.",
+        "info": "",
+        "x": 428.77146911621094,
+        "y": 842.1143054962158,
+        "wires": []
+    },
+    {
+        "id": "3e722e9b.ed6c72",
+        "type": "comment",
+        "z": "94162d4b.719dd",
+        "name": "... and this flow will update the record non-destructively.",
+        "info": "",
+        "x": 397.20001220703125,
+        "y": 291.6000061035156,
+        "wires": []
+    },
+    {
+        "id": "e4495550.440ab8",
+        "type": "inject",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "topic": "",
+        "payload": "{\"b\":2, \"answer\":\"forty two\"}",
+        "payloadType": "string",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 176.1999969482422,
+        "y": 332.6000061035156,
+        "wires": [
+            [
+                "81d23254.96ed7"
+            ]
+        ]
+    },
+    {
+        "id": "323f1ade.8b3546",
+        "type": "firebase modify",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "method": "update",
+        "x": 608.2000122070312,
+        "y": 332.6000061035156,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81d23254.96ed7",
+        "type": "json",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "x": 415,
+        "y": 333.40000915527344,
+        "wires": [
+            [
+                "323f1ade.8b3546"
+            ]
+        ]
+    },
+    {
+        "id": "9c10f333.bfcd9",
+        "type": "firebase query",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "firebaselogin": "",
+        "firebasepath": "",
+        "child": "payload",
+        "x": 418.5714569091797,
+        "y": 479.7142810821533,
+        "wires": [
+            [
+                "45d8d780.9c4638"
+            ]
+        ]
+    },
+    {
+        "id": "95220fa4.6e2f4",
+        "type": "firebase watch",
+        "z": "94162d4b.719dd",
+        "name": "",
+        "x": 202,
+        "y": 126,
+        "wires": [
+            [
+                "b5be6d94.eac47"
+            ]
+        ]
+    },
+    {
+        "id": "39bf13.2587b0ee",
+        "type": "inject",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "7",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 190,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c34ec47f.6cd418",
+        "type": "http in",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "url": "/api/deputy/timesheet/saved/",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 250,
+        "y": 240,
+        "wires": [
+            [
+                "d42a0e4d.895a",
+                "6d6f2bc4.43ece4"
+            ]
+        ]
+    },
+    {
+        "id": "d42a0e4d.895a",
+        "type": "debug",
+        "z": "d7089891.0cb2d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 520,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "6d6f2bc4.43ece4",
+        "type": "http response",
+        "z": "d7089891.0cb2d8",
+        "name": "200",
+        "statusCode": "200",
+        "headers": {},
+        "x": 520,
+        "y": 320,
+        "wires": []
+    }
+]
