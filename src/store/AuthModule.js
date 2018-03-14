@@ -1,6 +1,13 @@
 //  import firebase from "firebase"
 // import * as firebase from "firebase"
 import firebase from "../components/firebaseInit"
+import axios from 'axios'
+// var deputyService = axios.create({
+//   baseURL: 'https://054b6b12055851.na.deputy.com/api/v1',
+//   timeout: 1000,
+//   headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
+// });
+
 const AuthModule = {
   state: {
     user: null,
@@ -19,6 +26,7 @@ const AuthModule = {
           if (snap.val()) {
             // if we lose network then remove this user from the list
             myUserRef.onDisconnect().remove()
+            myUserRef.signOut().remove()
             // set user's online status
             let presenceObject = { user: payload, status: "online" }
             myUserRef.set(presenceObject)
@@ -31,18 +39,60 @@ const AuthModule = {
     },
   },
   actions: {
-    signUserIn({ commit }, payload) {
+    clockUserInDeputy({ commit }, payload) {
+
+      var deputyService = axios.create({
+        baseURL: 'http://47.219.112.177:1880/api/deputy',
+        timeout: 5000,
+        headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
+      });
+
       commit("setLoading", true)
+      deputyService.post('/timesheet/saved/', 
+        {'intemployeeId': 1, 'intOpunitId': 3}
+      ).then((timeSheet) =>{
+        console.log(timeSheet)
+      })
       firebase.databaseURL = "https://andrewsadmin.firebaseio.com"
       firebase
         .auth()
-        .signInWithEmailAndPassword("d@d.com", "asdfasdf")
+        .signOut()
         .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code
           var errorMessage = error.message
+          console.log(errorMessage)
+        })
+    },
+    signUserOut({ commit }, payload) {
+      commit("setLoading", true)
+      firebase.databaseURL = "https://andrewsadmin.firebaseio.com"
+      firebase
+        .auth()
+        .signOut()
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code
+          var errorMessage = error.message
+          console.log(errorMessage)
+        })
+    },
+    signUserIn({ commit }, payload) {
+      commit("setLoading", true)
+      console.log(payload)
+      firebase.databaseURL = "https://andrewsadmin.firebaseio.com"
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.email, "asdfasdf")
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code
+          var errorMessage = error.message
+          console.log(errorMessage)
+          return
         })
         .then(user => {
+          console.log(user)
           firebase
             .database()
             .ref("users")
@@ -65,7 +115,7 @@ const AuthModule = {
           commit("setError", error)
         })
     },
-  },
+  
   signUserUp({ commit }, payload) {
     commit("setLoading", true)
     commit("clearError")
@@ -98,7 +148,8 @@ const AuthModule = {
         commit("setLoading", false)
         commit("setError", error)
       })
-  },
+  }
+},
   getters: {
     user(state) {
       return state.user

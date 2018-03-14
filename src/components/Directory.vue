@@ -50,6 +50,8 @@ import { ENGINE_METHOD_CIPHERS } from "constants"
 const db = firebase.firestore()
 const storageRef = firebase.storage().ref()
 const imagesRef = storageRef.child("home")
+// import Raven from 'raven-js'
+// console.log(Raven.isSetup())
 
 export default {
 	name: "Employees",
@@ -112,16 +114,22 @@ export default {
 							// drivers_license_nbr: doc.data.drivers_license_nbr,
 							// signed_docs: doc.data.signed_docs,
 						}
+						doc.data().photoUrl = '../statics/quasar-logo.png'
+						
 						// console.log(data)
 						// console.log(doc.data.photoUrl)
-						console.log(doc.data().photoUrl)
-						if(!doc.data().photoUrl){
-							console.log('bad')
-						}else{
-							console.log('good')
-						}
+						// console.log(doc.data().photoUrl)
+					// 	if(!doc.data().photoUrl){
+					// this.employees.push(doc.data())
+					// 	return
+					// 	}
+					// 		console.log(doc.data().photoUrl)
+							
+						doc.data().photoUrl = '../statics/quasar-logo.png'
+						// console.log(doc.data().photoUrl)
 						this.employees.push(doc.data())
-					})
+
+})
 				})
 			this.employeesLoading = false
 		},
@@ -323,6 +331,14 @@ export default {
 					"https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F" +
 					_emp_id +
 					".jpg?alt=media"
+					try{
+					console.log(_photoUrl)
+					console.log('yay')
+					}catch(e){
+						console.log(e)
+						console.log('get img')
+					}
+						console.log(doc.data().photoUrl)
 				var _fullname = value.first_name + " " + value.last_name
 				console.log(_userId)
 				// console.log(value.first_name,value.last_name,user_name,_email,cellPhone,position,'0001','0001')

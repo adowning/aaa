@@ -31,15 +31,34 @@
           <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
         </q-toolbar-title>
 		</div>
-     <div id="profile" class="q-pl-xs">
+     <div id="profile" class="row justify-center">
        <div row class="q-pt-lg">
   <img :src="user.photoURL" class="avatar img-thumbnail hidden-print inline-block" > 
        </div>
+   
       </div>
+			  <!-- <div class="row justify-center q-mt-sm"> -->
+						  <div class="row justify-center q-pt-sm" >
+			 <span style="color: white; "><strong>{{user.username}}</strong></span>
+       </div>
+						  <div class="row justify-center " >
+			 
+			 <span style="color: green;" v-if="user.clockedIn">On Shift</span>
+			 <span class="q-body-1" v-else>No scheduled shifts</span>
+			 
+			 <!-- <div class="q-caption">Administration Applicat</div>  -->
+						  </div>
+       <!-- </div> -->
+			 
 			<div class="row justify-center q-mt-md" >
-      <q-btn  size="sm" color="secondary" label="Profile" />
-			<p style="padding-left: 1em;"></p> 
-      <q-btn size="sm" color="secondary" label="Clock IN" />
+      <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
+			<template v-if="user.clockedIn">
+				<q-btn size="sm" color="secondary" label="Start Break" @click="takeBreak()"/>
+			<p style="padding-left: 5px;"></p> 
+      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/></template>
+     <q-btn size="sm" color="secondary" label="Clock In" @click="clockIn()" v-else/>
+  
+			
 			</div>
 			<hr>
      <div row>
@@ -91,7 +110,7 @@
       <router-view />
     </q-page-container>
     <q-layout-footer v-model="footer"  >
-      <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #31CCEC !important; color:#4c566a;">
+      <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #b48ead !important; color:#4c566a;">
         <q-toolbar-title class="q-caption">
            <!-- Battery status is: <strong>{{ batteryStatus }}</strong> -->
 
@@ -105,7 +124,7 @@
 import { openURL } from "quasar"
 import router from "../router"
 import footer from "quasar"
-import store from "../store"
+// import store from "../store"
 import { Notify } from "quasar"
 const querystring = require("querystring")
 export default {
@@ -174,6 +193,18 @@ export default {
 		)
 	},
 	methods: {
+		clockIn() {
+				var vm = this
+			this.$store
+				.dispatch("clockUserInDeputy", {})
+				.then(function() {
+					// Notify.create("You have been loged out")
+					// vm.$router.push({ path: "/" })
+				})
+				.catch(function(error) {
+					console.log(error)
+				})
+		},
 		updateBatteryStatus(status) {
 			this.batteryStatus = `Level: ${status.level}, plugged: ${
 				status.isPlugged
@@ -181,10 +212,16 @@ export default {
 		},
 		// openURL,
 		logOut(reason) {
-			if (reason) {
-				Notify.create(reason)
-			}
-			this.$router.push({ path: "/" })
+			var vm = this
+			this.$store
+				.dispatch("signUserOut", {})
+				.then(function() {
+					Notify.create("You have been loged out")
+					vm.$router.push({ path: "/" })
+				})
+				.catch(function(error) {
+					console.log(error)
+				})
 		},
 		beforeDestroy() {
 			// we make some cleanup;

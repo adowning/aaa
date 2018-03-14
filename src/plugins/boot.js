@@ -9,4 +9,6 @@ export default ({ app, Vue }) => {
   new Vue(app)
   // "app" has everything cooked in by Quasar CLI,
   // you don't need to inject it with anything at this point
+
+
 }

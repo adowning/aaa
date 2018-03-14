@@ -1,0 +1,61 @@
+Arguments: 
+  /home/ash/.nvm/versions/node/v8.9.4/bin/node /home/ash/.nvm/versions/node/v8.9.4/bin/yarn
+
+PATH: 
+  /usr/local/gradle/bin:/home/ash/bin:/home/ash/.local/bin:/home/ash/.nvm/versions/node/v8.9.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/ash/.fzf/bin:/home/ash/Android/Sdk//tools:/home/ash/Android/Sdk//platform-tools
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  8.9.4
+
+Platform: 
+  linux x64
+
+npm manifest: 
+  {
+      "name": "org.cordova.andrews.app",
+      "displayName": "andrews-admin",
+      "version": "1.0.0",
+      "description": "A sample Apache Cordova application that responds to the deviceready event.",
+      "main": "index.js",
+      "scripts": {
+          "test": "echo \"Error: no test specified\" && exit 1"
+      },
+      "author": "Apache Cordova Team",
+      "license": "Apache-2.0",
+      "dependencies": {
+          "cordova-android": "^7.0.0",
+          "cordova-plugin-battery-status": "^2.0.1",
+          "cordova-plugin-camera": "^4.0.2",
+  
+          "cordova-plugin-whitelist": "^1.3.3",
+          "ubuntu": "^2.0.0"
+      },
+      "cordova": {
+          "plugins": {
+              "cordova-plugin-whitelist": {},
+              "cordova-plugin-battery-status": {},
+              "cordova-plugin-camera": {},       
+         	},
+          "platforms": [
+              "android"
+          ]
+      }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  SyntaxError: /home/ash/andrews-admin/src-cordova/package.json: Unexpected token } in JSON at position 796
+      at JSON.parse (<anonymous>)
+      at /home/ash/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:1036:59
+      at Generator.next (<anonymous>)
+      at step (/home/ash/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /home/ash/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:109:13
+      at <anonymous>
