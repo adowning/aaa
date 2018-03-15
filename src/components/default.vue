@@ -43,7 +43,7 @@
        </div>
 						  <div class="row justify-center " >
 			 
-			 <span style="color: green;" v-if="user.clockedIn">On Shift</span>
+			 <span style="color: green;" v-if="user.isClockedIn">On Shift</span>
 			 <span class="q-body-1" v-else>No scheduled shifts</span>
 			 
 			 <!-- <div class="q-caption">Administration Applicat</div>  -->
@@ -52,7 +52,7 @@
 			 
 			<div class="row justify-center q-mt-md" >
       <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
-			<template v-if="user.clockedIn">
+			<template v-if="user.isClockedIn">
 				<q-btn size="sm" color="secondary" label="Start Break" @click="takeBreak()"/>
 			<p style="padding-left: 5px;"></p> 
       <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/></template>
@@ -94,7 +94,7 @@
         <q-item-main label="My Profile"/>
       </q-item>
   </q-collapsible>
-   <q-item to="/documents">
+   <q-item to="/services">
         <q-item-side icon="assignment" />
         <q-item-main label="Documents"  />
       </q-item>
@@ -193,8 +193,20 @@ export default {
 		)
 	},
 	methods: {
+		clockOut() {
+			var vm = this
+			this.$store
+				.dispatch("clockUserOutDeputy", {})
+				.then(function() {
+					// Notify.create("You have been loged out")
+					// vm.$router.push({ path: "/" })
+				})
+				.catch(function(error) {
+					console.log(error)
+				})
+		},
 		clockIn() {
-				var vm = this
+			var vm = this
 			this.$store
 				.dispatch("clockUserInDeputy", {})
 				.then(function() {

@@ -67,6 +67,13 @@
 import firebase from "./firebaseInit"
 import "firebase/firestore"
 const db = firebase.firestore()
+// import 'vuetify/dist/vuetify.min.css' 
+import Vuetify from "vuetify"
+import "vuetify/dist/vuetify.min.css"
+import Vue from 'vue'
+Vue.use(Vuetify)
+
+
 export default {
 	name: "Services",
 	data() {

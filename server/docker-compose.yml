@@ -1,80 +1,575 @@
+# version: '2'
+# services:
+#   # Central Volumes Image
+#   # volumes:
+#   #   image: tianon/true
+#   #   volumes:
+#   #     # YouTransfer
+#   #     - "./node-red/:/root/.node-red"
+
+#   # # Central NGINX-Proxy
+#   # proxy:
+#   #   image: jwilder/nginx-proxy
+#   #   ports:
+#   #     - "80:80"
+#   #   volumes:
+#   #     - "/var/run/docker.sock:/tmp/docker.sock:ro"
+#   #   restart: always
+
+#   mqtt:
+#     image: eclipse-mosquitto:latest
+#     # restart: always
+#     ports:
+#     - "1883:1883"
+#     - "9001:9001"
+#     volumes:
+#     - ./mqtt/config:/mosquitto/config
+#     - ./mqtt/data:/mosquitto/data
+#     - ./mqtt/log:/mosquitto/log
+#   # collectd:
+#   #   image: fr3nd/collectd
+#   #   privileged: true
+#   #   network_mode: host
+#   #   volumes:
+#   #     - /proc:/mnt/proc:ro
+#   #     - ./collectd.conf:/etc/collectd/collectd.conf
+#   netdata:
+#     image: titpetric/netdata:latest
+#     cap_add:
+#     - SYS_PTRACE
+#     volumes:
+#     - /proc:/host/proc:ro
+#     - /sys:/host/sys:ro
+#     - /var/run/docker.sock:/var/run/docker.sock
+#     environment:
+#       NETDATA_PORT: 19999
+#     ports:
+#      - "19999:19999"
+
+#   # influxdb:
+#   #   image: influxdb:1.0
+#   #   ports:
+#   #     - "8083:8083"
+#   #     - "8086:8086"
+#   #     - "25826:25826/udp"
+#   #   volumes:
+#   #     - /var/lib/influxdb
+#   #     - ./influxdb.conf:/etc/influxdb/influxdb.conf
+#   #     - ./types.db:/usr/share/collectd/types.db:ro
+#   # grafana:
+#   #   image: grafana/grafana:3.1.1
+#   #   ports:
+#   #     - "3000:3000"
+#   #   volumes:
+#   #     - /var/lib/grafana
+#   # nodered:
+#   #   image: nodered/node-red-docker
+#   #   ports:
+#   #     - "1880:1880"
+#   #   volumes:
+#   #     - ~/.node-red:/data
+#     # Node-Red
+#   # nodered:
+#   #   image: beevelop/node-red
+#   #   environment:
+#   #     - VIRTUAL_HOST=ashdevtools.com
+#   #     - VIRTUAL_PORT=1880
+#   #   ports:
+#   #     - "1880:1880"
+#   #   # volumes_from:
+#   #     # - "volumes"
+#   #   volumes:
+#   #   - "./node-red/:/root/.node-red"
+#   #   # restart: always
 version: '2'
 services:
-  # Central Volumes Image
-  # volumes:
-  #   image: tianon/true
-  #   volumes:
-  #     # YouTransfer
-  #     - "./node-red/:/root/.node-red"
-
-  # # Central NGINX-Proxy
-  # proxy:
-  #   image: jwilder/nginx-proxy
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  #   restart: always
-
-  mqtt:
-    image: eclipse-mosquitto:latest
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    environment:
+      - DEFAULT_HOST=api-proxy
+      - VIRTUAL_HOST=nginx
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  api-proxy:
+    image: lelylanlab/api-proxy:latest
     restart: always
-    ports:
-    - "1883:1883"
-    - "9001:9001"
-    volumes:
-    - ./mqtt/config:/mosquitto/config
-    - ./mqtt/data:/mosquitto/data
-    - ./mqtt/log:/mosquitto/log
-  # collectd:
-  #   image: fr3nd/collectd
-  #   privileged: true
-  #   network_mode: host
-  #   volumes:
-  #     - /proc:/mnt/proc:ro
-  #     - ./collectd.conf:/etc/collectd/collectd.conf
-  netdata:
-    image: titpetric/netdata:latest
-    cap_add:
-    - SYS_PTRACE
-    volumes:
-    - /proc:/host/proc:ro
-    - /sys:/host/sys:ro
+    expose:
+      - 8000
+    depends_on:
+      - people
+      - devices
+      - types
+      - subscriptions
+      - profiles
+      - mongodb
+      - redis
+      - memcached
     environment:
-      NETDATA_PORT: 19999
+      - VIRTUAL_HOST=api-proxy
+      - VIRTUAL_PORT=8000
+      - PORT=8000
+      - DEBUG=lelylan
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+      - LELYLAN_PEOPLE_PORT=80
+      - LELYLAN_DEVICES_PORT=80
+      - LELYLAN_TYPES_PORT=80
+      - LELYLAN_SUBSCRIPTIONS_PORT=80
+      - LELYLAN_PROFILES_PORT=80
+      - LELYLAN_PROXY_URL=api-proxy
+  devices:
+    image: lelylanlab/devices:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+      - people
+      - types
+      - subscriptions
+      - profiles
+    environment:
+      - VIRTUAL_HOST=devices
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  mqtt:
+    image: lelylanlab/mqtt:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=mqtt
+      - REDIS_HOST=redis
+      - DEBUG=lelylan
+      - NODE_PORT=1883
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  nodes:
+    image: lelylanlab/nodes:latest
+    restart: always
+    expose:
+      - 8000
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+      - api-proxy
+      - mqtt
+    environment:
+      - VIRTUAL_HOST=nodes
+      - VIRTUAL_PORT=8000
+      - PORT=8000
+      - MOSCA_HOST=mqtt
+      - REDIS_HOST=redis
+      - LELYLAN_API_URL=http://api-proxy:8000
+      - LELYLAN_API_HOST=api-proxy
+      - DEBUG=lelylan
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  people:
+    image: lelylanlab/people:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - types
+      - subscriptions
+      - profiles
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=people
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+      - LELYLAN_DEV_URL=dev-center
+      - LELYLAN_DEV_PORT=80
+  physicals:
+    image: lelylanlab/physicals:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=physicals
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - DEBUG=lelylan
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  profiles:
+    image: lelylanlab/profiles:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - types
+      - subscriptions
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=profiles
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  subscriptions:
+    image: lelylanlab/subscriptions:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - types
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=subscriptions
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  types:
+    image: lelylanlab/types:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=types
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+  webhooks:
+    image: lelylanlab/webhooks:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=webhooks
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
+      - DEBUG=true
+  websockets:
+    image: lelylanlab/websockets:latest
+    restart: always
+    expose:
+      - 8000
+    depends_on:
+      - mongodb
+      - redis
+      - memcached
+    environment:
+      - VIRTUAL_HOST=websockets
+      - VIRTUAL_PORT=8000
+      - DEBUG=lelylan
+      - PORT=8000
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_DEVICES_URL=devices
+      - LELYLAN_TYPES_URL=types
+      - LELYLAN_SUBSCRIPTIONS_URL=subscriptions
+      - LELYLAN_PROFILES_URL=profiles
+      - MONGOLAB_PEOPLE_URL=mongodb://mongodb:27017/people
+      - MONGOLAB_DEVICES_URL=mongodb://mongodb:27017/devices
+      - MONGOLAB_TYPES_URL=mongodb://mongodb:27017/types
+      - MONGOLAB_JOBS_URL=mongodb://mongodb:27017/jobs
+      - MONGOLAB_SUBSCRIPTIONS_URL=mongodb://mongodb:27017/subscriptions
+      - MONGOLAB_LOCATIONS_URL=mongodb://mongodb:27017/
+      - REDIS_URL=redis://redis:6379/
+      - REDIS_RATE_LIMIT_URL=redis://redis:6379/
+      - MEMCACHIER_SERVERS=memcached:11211
+      - MEMCACHIER_USERNAME=user
+      - MEMCACHIER_PASSWORD=password
 
-  influxdb:
-    image: influxdb:1.0
-    ports:
-      - "8083:8083"
-      - "8086:8086"
-      - "25826:25826/udp"
-    volumes:
-      - /var/lib/influxdb
-      - ./influxdb.conf:/etc/influxdb/influxdb.conf
-      - ./types.db:/usr/share/collectd/types.db:ro
-  grafana:
-    image: grafana/grafana:3.1.1
-    ports:
-      - "3000:3000"
-    volumes:
-      - /var/lib/grafana
-  # nodered:
-  #   image: nodered/node-red-docker
-  #   ports:
-  #     - "1880:1880"
-  #   volumes:
-  #     - ~/.node-red:/data
-    # Node-Red
-  nodered:
-    image: beevelop/node-red
+  #: Development tools
+  types-dashboard:
+    image: lelylanlab/types-dashboard-ng:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - api-proxy
+      - people
+      - websockets
     environment:
-      - VIRTUAL_HOST=ashdevtools.com
-      - VIRTUAL_PORT=1880
-    ports:
-      - "1880:1880"
-    # volumes_from:
-      # - "volumes"
+      - VIRTUAL_HOST=types-dashboard
+      - PUBLIC_HOST=types-dashboard
+      - LISTEN_HOST=0.0.0.0
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_API_PUBLIC_URL=api-proxy
+      - LELYLAN_PEOPLE_PUBLIC_URL=people
+      - LELYLAN_CLIENT_ID=""
+      - LELYLAN_TYPES_DASHBOARD_PUBLIC_URL=types-dashboard
+      - LELYLAN_DEVICES_DASHBOARD_PUBLIC_URL=devices-dashboard
+      - LELYLAN_WEBSOCKETS_PUBLIC_URL=websockets
+      - LELYLAN_DEV_CENTER_PUBLIC_URL=dev-center
+      - LELYLAN_NODES_PUBLIC_URL=nodes
+  devices-dashboard:
+    image: lelylanlab/devices-dashboard-ng:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - api-proxy
+      - people
+      - websockets
+    environment:
+      - VIRTUAL_HOST=devices-dashboard
+      - PUBLIC_HOST=devices-dashboard
+      - LISTEN_HOST=0.0.0.0
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_API_PUBLIC_URL=api-proxy
+      - LELYLAN_PEOPLE_PUBLIC_URL=people
+      - LELYLAN_CLIENT_ID=""
+      - LELYLAN_DEVICES_DASHBOARD_PUBLIC_URL=devices-dashboard
+      - LELYLAN_TYPES_DASHBOARD_PUBLIC_URL=types-dashboard
+      - LELYLAN_WEBSOCKETS_PUBLIC_URL=websockets
+      - LELYLAN_DEV_CENTER_PUBLIC_URL=dev-center
+      - LELYLAN_NODES_PUBLIC_URL=nodes
+  dev-center:
+    image: lelylanlab/dev:latest
+    restart: always
+    expose:
+      - 80
+    depends_on:
+      - people
+    environment:
+      - VIRTUAL_HOST=dev-center
+      - PORT=80
+      - RACK_ENV=development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+      - LELYLAN_PEOPLE_URL=people
+      - LELYLAN_PEOPLE_PORT=80
+
+  mongodb:
+    image: mongo:2.6
+    restart: always
+    volumes_from:
+      - mongodb-data
+    expose:
+      - 27017
+    command: mongod --smallfiles
+  mongodb-data:
+    image: mongo:2.6
     volumes:
-    - "./node-red/:/root/.node-red"
-    # restart: always
+      - /data/db
+      - /var/lib/mongodb
+      - /var/log/mongodb
+    entrypoint: /bin/true
+  redis:
+    image: redis:2.6
+    restart: always
+    volumes_from:
+      - redis-data
+    expose:
+      - 6379
+  redis-data:
+    image: redis:2.6
+    volumes:
+      - /data
+    entrypoint: /bin/true
+  memcached:
+    image: bitnami/memcached:latest
+    restart: always
+    expose:
+      - 11211
+    environment:
+      - MEMCACHED_USERNAME=user
+      - MEMCACHED_PASSWORD=password

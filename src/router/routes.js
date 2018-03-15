@@ -22,6 +22,10 @@ export default [
         path: "/directory",
         component: () => import("components/Directory"),
       },
+      {
+        path: "/hardware",
+        component: () => import("components/hardware/Hardware"),
+      },
     ],
   },
 

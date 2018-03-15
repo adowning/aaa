@@ -41,8 +41,12 @@
 
 
 <script>
-// var mqtt = require("mqtt");
+var mqtt = require("mqtt");
 // import owntracks from "../utils/owntracks";
+// import * as _ from 'lowdash'
+window._ = require('lodash');
+
+
 export default {
   name: "google-map",
   props: ["name"],
@@ -53,11 +57,8 @@ export default {
         {
           latitude: 32.3112106941694,
           longitude: -95.2633916507901
-        },
-        {
-          latitude: 32.3073276190509,
-          longitude: -95.2648030425142
         }
+       
       ],
       map: null,
       bounds: null,
@@ -68,22 +69,28 @@ export default {
   },
   methods: {
     refreshMarkers(_message) {
+      // console.log(JSON.parse(_message))
+      
       var vm = this;
       var message = {};
       try {
         message = JSON.parse(_message);
+        // console.log(JSON.parse(message.toString()))
       } catch (e) {
         return;
       }
       if (message._type != "location") {
+      console.log('not location')        
         return;
       }
       if (!message.tst) {
+        console.log('no tst setting new time')
         message.tst = new Date();
       }
+      // console.log(message)
       var tabletTracked = _.find(this.tabletList, { tid: message.tid });
       if (tabletTracked) {
-        console.log(tabletTracked);
+        // console.log(tabletTracked);
         var curPosition = new google.maps.LatLng(message.lat, message.lon);
         tabletTracked.position = curPosition;
         // this.map.fitBounds(this.bounds.extend(tabletTracked.position));
@@ -129,26 +136,28 @@ export default {
     const element = document.getElementById(this.mapName);
     const mapCentre = this.markerCoordinates[0];
     const options = {
-      center: new google.maps.LatLng(mapCentre.latitude, mapCentre.longitude)
+      center: new google.maps.LatLng(mapCentre.latitude, mapCentre.longitude),
+      zoom: 12
     };
     this.map = new google.maps.Map(element, options);
-    this.markerCoordinates.forEach(coord => {
-      const position = new google.maps.LatLng(coord.latitude, coord.longitude);
-      const marker = new google.maps.Marker({
-        position,
-        map: this.map
-      });
-      this.markers.push(marker);
-      this.map.fitBounds(this.bounds.extend(position));
-    });
-    // var _client = mqtt.connect("mqtt://47.219.112.177:9001");
+    this.map.setZoom(12)
+    // this.markerCoordinates.forEach(coord => {
+    //   const position = new google.maps.LatLng(coord.latitude, coord.longitude);
+    //   const marker = new google.maps.Marker({
+    //     position,
+    //     map: this.map
+    //   });
+    //   this.markers.push(marker);
+    //   this.map.fitBounds(this.bounds.extend(position));
+    // });
+   var _client = mqtt.connect("mqtt://47.219.112.177:9001");
 
     _client.on("connect", function() {
-      _client.subscribe("presence");
-      _client.subscribe("owntracks");
+      // _client.subscribe("presence");
+      // _client.subscribe("owntracks");
       _client.subscribe("owntracks/#");
-      _client.subscribe("owntracks/+/+");
-      _client.publish("presence", "Hello mqtt");
+      // _client.subscribe("owntracks/+/+");
+      // _client.publish("presence", "Hello mqtt");
     });
     //    _client.on('message', function (topic, message) {
     //   // message is Buffer
