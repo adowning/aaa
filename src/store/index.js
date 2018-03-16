@@ -4,6 +4,7 @@ import firebase from "../components/firebaseInit"
 import AuthModule from "./AuthModule"
 // import ChatModule from "./ChatModule"
 import VuexPersist from "vuex-persist"
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -27,6 +28,7 @@ const store = new Vuex.Store({
     loading: false,
     error: null,
     onlineUsers: [],
+    myData: {}
   },
   mutations: {
     setLoading(state, payload) {
@@ -41,6 +43,9 @@ const store = new Vuex.Store({
     setOnlineUsers(state, payload) {
       state.onlineUsers = payload
     },
+    setMyData(state, payload) {
+      state.myData = payload
+    },
   },
   actions: {
     loadOnlineUsers({ commit }) {
@@ -52,6 +57,20 @@ const store = new Vuex.Store({
           result[0] = snapshot.numChildren()
           result[1] = snapshot.val()
           commit("setOnlineUsers", result)
+        })
+    },
+    loadMyData({ commit }, payload) {
+      commit("setLoading", true)
+      console.log('loading')
+      axios
+        .get("http://47.219.112.177:1880/api/login")
+        .then(result => {
+          commit("setMyData", result.data)
+          commit("setLoading", false)
+        })
+        .catch(error => {
+          console.log(error)
+          commit("setLoading", false)
         })
     },
     clearError({ commit }) {
@@ -67,6 +86,9 @@ const store = new Vuex.Store({
     },
     onlineUsers(state) {
       return state.onlineUsers
+    },
+    myData(state) {
+      return state.myData
     },
   },
   plugins: [vuexLocalStorage.plugin],

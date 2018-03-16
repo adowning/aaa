@@ -26,6 +26,10 @@ export default [
         path: "/hardware",
         component: () => import("components/hardware/Hardware"),
       },
+      {
+        path: "/logs",
+        component: () => import("components/Logs"),
+      },
     ],
   },
 

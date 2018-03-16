@@ -38,10 +38,13 @@
  
 </div>
 </template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmwNvsV8ANcjbaAhgdrNhx39Qst6EUEeo"></script>  
 
 
 <script>
-var mqtt = require("mqtt");
+// var mqtt = require("mqtt");
+// import mqtt from 'mqtt'
 // import owntracks from "../utils/owntracks";
 // import * as _ from 'lowdash'
 window._ = require('lodash');
@@ -150,7 +153,8 @@ export default {
     //   this.markers.push(marker);
     //   this.map.fitBounds(this.bounds.extend(position));
     // });
-   var _client = mqtt.connect("mqtt://47.219.112.177:9001");
+  //  var _client = mqtt.connect("mqtt://47.219.112.177:9001");
+var _client  = new Paho.MQTT.Client(location.hostname, Number(location.port), "clientId");
 
     _client.on("connect", function() {
       // _client.subscribe("presence");

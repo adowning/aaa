@@ -4,9 +4,10 @@
     <q-page padding class="row justify-center ">
     <div style="width: 600px; max-width: 90vw; ">
       <div class="flex-row-docs q-al-xl">
-        <h4>Andrews Administration Application</h4>
+			
         <div class="doc-container q-pa-xl">
           <div class="row justify-center ">
+							<img style="width: 300px; height: 280px;" src="../statics/logo.png" size= />
         <div class="input-group ">
           <span class="input-group-addon "><i class="fa fa-envelope"></i></span>
           <input class="form-control " name="email" placeholder="Email" type="text" v-model="email"><br>
@@ -18,8 +19,22 @@
 		<div class="q-pa-sm">
            <q-btn  color="primary" @click="onSignin(email, pass)">Submit</q-btn>
 		</div>
+			<div class="q-pa-sm" v-if="devMode == 'development'">
+           <!-- <q-btn  color="primary" @click="onSignin('d@d.com', 'asdfasdf', 'dname')">D Submit</q-btn>
+           <q-btn  color="primary" @click="onSignin('a@a.com', 'asdfasdf', 'aname')">A Submit</q-btn>
+           <q-btn  color="primary" @click="onSignin('b@b.com', 'asdfasdf', 'bname')">B Submit</q-btn>
+           <q-btn  color="primary" @click="onSignin('c@c.com', 'asdfasdf', 'cname')">C Submit</q-btn> -->
+		</div>
+				<div class="q-pa-sm" v-if="devMode == 'development'">
+					 <!-- <input class="form-control " name="email" placeholder="Email" type="text" v-model="newemail"><br>
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="password" placeholder="Password" type="password" v-model="newpass">
+           <q-btn  color="primary" @click="onSignUp('d@d.com', 'asdfasdf')">Signu p new user</q-btn> -->
+		</div>
           </div>
             </div>
+        <h4>Andrews Administration Application</h4>
+						
           </div>
 		       <div class="row justify-center">
         <!-- <q-alert
@@ -42,13 +57,18 @@ import firebase from "./firebaseInit"
 export default {
 	data() {
 		return {
-			email: "x",
-			pass: "x",
+			email: "",
+			pass: "",
+			newpass: '',
+			newemail: '',
+			username: '',
 			form: {},
 			login: true,
+			devMode: process.env.NODE_ENV
 		}
 	},
 	computed: {
+
 		user() {
 			return this.$store.getters.user
 		},
@@ -62,29 +82,61 @@ export default {
 	watch: {
 		user(value) {
 			if (value !== null && value !== undefined) {
-				this.$router.push("/profile")
+
+				this.$router.push("/liveview")
 			}
 		},
 	},
 	methods: {
-		onSignin(email, pass) {
+		onSignin(email, pass, username) {
+			if(!username){
+				username = 'none'
+			}
 			var vm = this
 			window.localStorage.clear()
 			window.sessionStorage.clear()
-			this.$store.dispatch("signUserIn", {
-				email: email,
-				password: pass
-			})
+			console.log(email)
+			this.$store
+				.dispatch("signUserIn", {
+					email: email,
+					pass: pass,
+					username: username
+				})
+				.then(() => {
+					// this.$store.dispatch("loadMyData", {})
+					this.$store.dispatch('updateClockStatus')
+				})
 		},
 		onDismissed() {
 			this.$store.dispatch("clearError")
+		},
+		onSignUp(email, pass, username) {
+			var vm = this
+			window.localStorage.clear()
+			window.sessionStorage.clear()
+			this.$store
+				.dispatch("signUserUp", {
+					email: email,
+					pass: pass,
+					username: username
+				})
+				.then(() => {
+				//	this.$store.dispatch("loadMyData", {})
+				console.log('signed up!')
+				})
 		},
 	},
 }
 </script>
 
-<style>
+<style scoped>
 .error {
 	color: red;
+}
+.logo {
+
+    height: 100px;
+    width: 50%;
+    
 }
 </style>

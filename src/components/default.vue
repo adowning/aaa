@@ -16,8 +16,10 @@
           <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
         </q-toolbar-title>
         <q-search inverted v-model="search" color="none" value="x" class="q-mr-xl" />
-                <q-btn flat round dense icon="exit to app" label="Logout"  @click="logOut()"></q-btn>
+		
                 <span>{{user.username}}</span>
+		
+                    <q-btn flat round dense icon="exit to app" label="Logout"  @click="logOut()"></q-btn>
       </q-toolbar>
     </q-layout-header>
 
@@ -43,7 +45,7 @@
        </div>
 						  <div class="row justify-center " >
 			 
-			 <span style="color: green;" v-if="user.isClockedIn">On Shift</span>
+			 <span style="color: purple;" v-if="user.isClockedIn">Clocked In</span>
 			 <span class="q-body-1" v-else>No scheduled shifts</span>
 			 
 			 <!-- <div class="q-caption">Administration Applicat</div>  -->
@@ -53,9 +55,13 @@
 			<div class="row justify-center q-mt-md" >
       <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
 			<template v-if="user.isClockedIn">
-				<q-btn size="sm" color="secondary" label="Start Break" @click="takeBreak()"/>
+				<template v-if="user.isContractor">
+					contractor
+				</template>
+				<template v-if="!user.isContractor">
+				<q-btn size="sm" color="secondary" label="Start Break"/>
 			<p style="padding-left: 5px;"></p> 
-      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/></template>
+      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/> </template> </template>
      <q-btn size="sm" color="secondary" label="Clock In" @click="clockIn()" v-else/>
   
 			
@@ -149,6 +155,10 @@ export default {
 				this.$store.getters.user !== null &&
 				this.$store.getters.user !== undefined
 			)
+		},
+		myData(){
+			return this.$store.getters.myData
+			
 		},
 		user() {
 			return this.$store.getters.user

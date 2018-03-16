@@ -1,0 +1,30 @@
+[
+  {
+    "_id": { "$oid": "5aaac36938126c000753ea98" },
+    "fbId": "RvSFs0eDPfQh2DU5MlJ8ivGcNaw2",
+    "snipeId": "1",
+    "deputyId": "1",
+    "name": "Ash Downing"
+  },
+  {
+    "_id": { "$oid": "5aaac36938126c000753ea98" },
+    "fbId": "JbBoSjognBQMOvgomW0bSWx5IW73",
+    "snipeId": "80",
+    "deputyId": "81",
+    "name": "A Guy"
+  }
+  ,  {
+    "_id": { "$oid": "aTVto88qGWepnr2EbvISTY1EVN03" },
+    "fbId": "RvSFs0eDPfQh2DU5MlJ8ivGcNaw2",
+    "snipeId": "81",
+    "deputyId": "81",
+    "name": "B Guy"
+  },
+  {
+    "_id": { "$oid": "EEBXCfuvzxSTbh9HKghttJUBVGb2" },
+    "fbId": "RvSFs0eDPfQh2DU5MlJ8ivGcNaw2",
+    "snipeId": "82",
+    "deputyId": "81",
+    "name": "C Guy"
+  }
+]

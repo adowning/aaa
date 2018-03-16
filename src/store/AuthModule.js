@@ -2,11 +2,11 @@
 // import * as firebase from "firebase"
 import firebase from "../components/firebaseInit"
 import axios from 'axios'
-var deputyService = axios.create({
-  baseURL: 'https://054b6b12055851.na.deputy.com/api/v1',
-  timeout: 1000,
-  headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
-});
+// var deputyService = axios.create({
+//   baseURL: 'https://054b6b12055851.na.deputy.com/api/v1',
+//   timeout: 1000,
+//   headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
+// });
 
 const AuthModule = {
   state: {
@@ -20,8 +20,10 @@ const AuthModule = {
       const userListRef = firebase.database().ref("presence")
       const myUserRef = userListRef.push()
       firebase.databaseURL = "https://andrewsadmin.firebaseio.com"
-
-      firebase
+      var setFB = function(myData, state, payload){
+        state.myData = myData
+        console.log(myData, state, payload)
+        firebase
         .database()
         .ref(".info/connected")
         .on("value", function(snap) {
@@ -37,6 +39,17 @@ const AuthModule = {
             let presenceObject = { user: payload, status: "offline" }
             myUserRef.set(presenceObject)
           }
+        })
+      }
+     
+        axios
+        .get("http://47.219.112.177:1880/api/login")
+        .then(result => {
+          setFB(result, state, payload)
+        })
+        .catch(error => {
+          console.log(error)
+         
         })
     },
     setTimeSheet(state, payload) {
@@ -60,6 +73,7 @@ const AuthModule = {
       });
 
       commit("setLoading", true)
+      
       deputyService.post('/timesheet/', 
         {'intEmployeeId': 1, 'intOpunitId': 3, 'action': 'end'}
       ).then((response) =>{
@@ -129,18 +143,45 @@ const AuthModule = {
           return
         })
         .then(user => {
-          console.log(user)
+          console.log(user.uid)
           firebase
             .database()
             .ref("users")
             .child(user.uid)
             .once("value", function(data) {
               commit("setLoading", false)
-              // console.log(data.val().DisplayName)
+          console.log(data.val())
+              var un = ''
+              try{
+                un = data.val().username
+              }catch(err){
+                un = 'myusernamesux'
+
+              }
+              var pURL = ''
+              try{
+                pURL = data.val().photoURL
+              }catch(err){
+                pURL = "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2Fno_avatar.png?alt=media&token=f3564aff-adea-4cd6-baa2-de0028472437"
+
+              }
+              // firebase
+              // .database()
+              // .ref("users")
+              // .child(user.uid)
+              // .set({
+              //   name: payload.username,
+              //   displayName: payload.username,
+              //   username: 'B Guy',
+              //   email: payload.email,
+              //   photoURL: "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2Fno_avatar.png?alt=media&token=f3564aff-adea-4cd6-baa2-de0028472437"
+    
+              // })
+
               const newUser = {
                 id: user.uid,
-                username: data.val().username,
-                photoURL: data.val().photoURL,
+                username: un,
+                photoURL: pURL,
                 email: data.val().email,
               }
               commit("setUser", newUser)
@@ -158,7 +199,7 @@ const AuthModule = {
     commit("clearError")
     firebase
       .auth()
-      .createUserWithEmailAndPassword(payload.email, payload.password, emp_id)
+      .createUserWithEmailAndPassword(payload.email, payload.pass)
       .then(user => {
         firebase
           .database()
@@ -166,13 +207,17 @@ const AuthModule = {
           .child(user.uid)
           .set({
             name: payload.username,
+            displayName: payload.username,
+            
+            photoURL: "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2Fno_avatar.png?alt=media&token=f3564aff-adea-4cd6-baa2-de0028472437"
+
           })
           .then(message => {
             commit("setLoading", false)
             const newUser = {
               id: user.uid,
-              username: payload.username,
-              emp_id: payload.emp_id,
+              username: payload.username
+             
             }
             commit("setUser", newUser)
           })
