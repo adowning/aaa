@@ -7,7 +7,7 @@ var humanityService = axios.create({
     timeout: 8000,
   })
 
-const AuthModule = {
+const HumanityModule = {
   state: {
     clockStatus: null,
     currentTimeSheet: null,
@@ -17,15 +17,31 @@ const AuthModule = {
     setClockStatus(state, payload) {
       state.clockStatus = payload
       if (!payload || payload == "undefined") {
-        state.user.isClockedIn = false
+        state.isClockedIn = false
       } else {
-        state.user.isClockedIn = true
+        state.isClockedIn = true
       }
     },
   },
   actions: {
     updateClockStatus({ commit }, payload) {
-      commit("setClockStatus", payload)
+        console.log(payload)
+        humanityService
+        .post("/updateClockStatus/", {
+          intEmployeeId: payload.id,
+          intOpunitId: 3,
+        //   action: "end",
+        })
+        .then(response => {
+    
+            console.log(response)
+          
+        })
+        .catch(error => {
+          console.log(error)
+ 
+        })
+     // commit("setClockStatus", payload)
     },
     clockUserOutHumanity({ commit }, payload) {
       commit("setLoading", true)

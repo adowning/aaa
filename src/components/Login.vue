@@ -20,10 +20,10 @@
            <q-btn  color="primary" @click="onSignin(email, pass)">Submit</q-btn>
 		</div>
 			<div class="q-pa-sm" v-if="devMode == 'development'">
-           <!-- <q-btn  color="primary" @click="onSignin('d@d.com', 'asdfasdf', 'dname')">D Submit</q-btn>
+           <q-btn  color="primary" @click="onSignin('d@d.com', 'asdfasdf', 'dname')">D Submit</q-btn>
            <q-btn  color="primary" @click="onSignin('a@a.com', 'asdfasdf', 'aname')">A Submit</q-btn>
            <q-btn  color="primary" @click="onSignin('b@b.com', 'asdfasdf', 'bname')">B Submit</q-btn>
-           <q-btn  color="primary" @click="onSignin('c@c.com', 'asdfasdf', 'cname')">C Submit</q-btn> -->
+           <q-btn  color="primary" @click="onSignin('c@c.com', 'asdfasdf', 'cname')">C Submit</q-btn>
 		</div>
 				<div class="q-pa-sm" v-if="devMode == 'development'">
 					 <!-- <input class="form-control " name="email" placeholder="Email" type="text" v-model="newemail"><br>
@@ -83,7 +83,7 @@ export default {
 		user(value) {
 			if (value !== null && value !== undefined) {
 
-				this.$router.push("/liveview")
+				this.$router.push("/profile")
 			}
 		},
 	},
@@ -104,7 +104,7 @@ export default {
 				})
 				.then(() => {
 					// this.$store.dispatch("loadMyData", {})
-					this.$store.dispatch('updateClockStatus')
+					this.$store.dispatch('updateClockStatus', this.user)
 				})
 		},
 		onDismissed() {

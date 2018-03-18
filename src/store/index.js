@@ -2,6 +2,7 @@ import Vue from "vue"
 import Vuex from "vuex"
 import firebase from "../components/firebaseInit"
 import AuthModule from "./AuthModule"
+import HumanityModule from "./HumanityModule"
 // import ChatModule from "./ChatModule"
 import VuexPersist from "vuex-persist"
 import axios from 'axios'
@@ -22,7 +23,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   modules: {
     auth: AuthModule,
-    // chat: ChatModule,
+     humanity: HumanityModule,
   },
   state: {
     loading: false,
