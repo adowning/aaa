@@ -52,12 +52,12 @@ plugins.push(pluginFirebase)
 import pluginVuelidate from 'src/plugins/vuelidate'
 plugins.push(pluginVuelidate)
 
+import pluginVuexloc from 'src/plugins/vuex-loc'
+plugins.push(pluginVuexloc)
+
 plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 
-
-import electron from 'electron'
-Vue.prototype.$q.electron = electron
 
 
 

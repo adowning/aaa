@@ -50,93 +50,111 @@
 </q-layout>
 </template>
 <script>
-import { required, email } from "vuelidate/lib/validators"
-import { Notify } from "quasar"
-import router from "../router"
-import firebase from "./firebaseInit"
+import { required, email } from "vuelidate/lib/validators";
+import { Notify } from "quasar";
+import router from "../router";
+// import firebase from "./firebaseInit";
+import axios from "axios";
+var humanityService = axios.create({
+  baseURL: "http://47.219.112.177:1880/api",
+  timeout: 8000
+});
+
 export default {
-	data() {
-		return {
-			email: "",
-			pass: "",
-			newpass: '',
-			newemail: '',
-			username: '',
-			form: {},
-			login: true,
-			devMode: process.env.NODE_ENV
-		}
-	},
-	computed: {
-
-		user() {
-			return this.$store.getters.user
-		},
-		error() {
-			return this.$store.getters.error
-		},
-		loading() {
-			return this.$store.getters.loading
-		},
-	},
-	watch: {
-		user(value) {
-			if (value !== null && value !== undefined) {
-
-				this.$router.push("/profile")
-			}
-		},
-	},
-	methods: {
-		onSignin(email, pass, username) {
-			if(!username){
-				username = 'none'
-			}
-			var vm = this
-			window.localStorage.clear()
-			window.sessionStorage.clear()
-			console.log(email)
-			this.$store
-				.dispatch("signUserIn", {
-					email: email,
-					pass: pass,
-					username: username
-				})
-				.then(() => {
-					// this.$store.dispatch("loadMyData", {})
-					this.$store.dispatch('updateClockStatus', this.user)
-				})
-		},
-		onDismissed() {
-			this.$store.dispatch("clearError")
-		},
-		onSignUp(email, pass, username) {
-			var vm = this
-			window.localStorage.clear()
-			window.sessionStorage.clear()
-			this.$store
-				.dispatch("signUserUp", {
-					email: email,
-					pass: pass,
-					username: username
-				})
-				.then(() => {
-				//	this.$store.dispatch("loadMyData", {})
-				console.log('signed up!')
-				})
-		},
-	},
-}
+  data() {
+    return {
+      email: "",
+      pass: "",
+      newpass: "",
+      newemail: "",
+      username: "",
+      form: {},
+      login: true,
+      devMode: process.env.NODE_ENV
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
+    loading() {
+      return this.$store.getters.loading;
+    }
+  },
+  watch: {
+    user(value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push("/profile");
+      }
+    }
+  },
+  methods: {
+    onSignin(email, pass, username) {
+      if (!username) {
+        username = "none";
+      }
+      var vm = this;
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      console.log(email);
+      humanityService
+        .post("/login", {
+          email: email,
+          password: pass
+        })
+        .then(response => {
+          console.log(response);
+          this.$store
+            .dispatch("signUserIn", {
+              user: response
+            })
+            .then(() => {});
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      //   this.$store
+      //     .dispatch("signUserIn", {
+      //       email: email,
+      //       pass: pass,
+      //       username: username
+      //     })
+      //     .then(() => {
+      //       // this.$store.dispatch("loadMyData", {})
+      //       //   this.$store.dispatch("updateClockStatus", this.user);
+      //     });
+    },
+    onDismissed() {
+      this.$store.dispatch("clearError");
+    },
+    onSignUp(email, pass, username) {
+      var vm = this;
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      this.$store
+        .dispatch("signUserUp", {
+          email: email,
+          pass: pass,
+          username: username
+        })
+        .then(() => {
+          //	this.$store.dispatch("loadMyData", {})
+          console.log("signed up!");
+        });
+    }
+  }
+};
 </script>
 
 <style scoped>
 .error {
-	color: red;
+  color: red;
 }
 .logo {
-
-    height: 100px;
-    width: 50%;
-    
+  height: 100px;
+  width: 50%;
 }
 </style>

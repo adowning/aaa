@@ -17,10 +17,17 @@
       "certificatePassword": ""
     }
   },
-  "win": {
-    "publish": [
-      "github"
+  "appId": "com.andrews.adminapp",
+  "mac": {
+    "target": [
+      "zip"
     ]
+  },
+  "win": {
+    "target": "squirrel"
+  },
+  "squirrelWindows": {
+    "useAppIdAsId": true
   },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
@@ -35,6 +42,7 @@
     "firebase": "^4.10.1",
     "firebase-functions": "^0.8.1",
     "lowdash": "^1.2.0",
+    "vue-browser-geolocation": "^1.0.1",
     "vuelidate": "^0.6.2",
     "vuetify": "^1.0.4",
     "vuex-geolocation": "^1.1.0",

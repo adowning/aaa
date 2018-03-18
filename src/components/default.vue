@@ -35,7 +35,7 @@
 		</div>
      <div id="profile" class="row justify-center">
        <div row class="q-pt-lg">
-  <img :src="user.photoURL" class="avatar img-thumbnail hidden-print inline-block" > 
+  <img :src="user.avatar.medium" class="avatar img-thumbnail hidden-print inline-block" > 
        </div>
    
       </div>
@@ -45,7 +45,7 @@
        </div>
 						  <div class="row justify-center " >
 			 
-			 <span style="color: purple;" v-if="user.isClockedIn">Clocked In</span>
+			 <span style="color: purple;" v-if="currentTimeSheet">Clocked In</span>
 			 <span class="q-body-1" v-else>No scheduled shifts</span>
 			 
 			 <!-- <div class="q-caption">Administration Applicat</div>  -->
@@ -54,11 +54,11 @@
 			 
 			<div class="row justify-center q-mt-md" >
       <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
-			<template v-if="user.isClockedIn">
-				<template v-if="user.isContractor">
+			<template v-if="currentTimeSheet">
+				<template v-if="user.employee_type == 'contractor'">
 					contractor
 				</template>
-				<template v-if="!user.isContractor">
+				<template v-if="user.employee_type != 'contractor'">
 				<q-btn size="sm" color="secondary" label="Start Break"/>
 			<p style="padding-left: 5px;"></p> 
       <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/> </template> </template>
@@ -117,157 +117,157 @@
     </q-page-container>
     <q-layout-footer v-model="footer"  >
       <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #b48ead !important; color:#4c566a;">
-        <q-toolbar-title class="q-caption">
+        <div class="row items-center">
            <!-- Battery status is: <strong>{{ batteryStatus }}</strong> -->
-
-        </q-toolbar-title>
+					Coords: {{location}}
+        </div>
       </q-toolbar>
     </q-layout-footer>
   </q-layout>
 </template>
 
 <script>
-import { openURL } from "quasar"
-import router from "../router"
-import footer from "quasar"
+import { openURL } from "quasar";
+import router from "../router";
+import footer from "quasar";
 // import store from "../store"
-import { Notify } from "quasar"
-const querystring = require("querystring")
+import { Notify } from "quasar";
+const querystring = require("querystring");
 export default {
-	name: "LayoutDefault",
-	data() {
-		return {
-			leftDrawerOpen: true,
-			search: " ",
-			footer: true,
-			batteryStatus: "determining...",
-		}
-	},
-	// beforeRouteEnter(to, from, next) {
-	// 	var vm = this
-	// 	if (!store.getters.user) {
-	// 		router.push("/login")
-	// 	}
-	// },
-	computed: {
-		userIsAuthenticated() {
-			return (
-				this.$store.getters.user !== null &&
-				this.$store.getters.user !== undefined
-			)
-		},
-		myData(){
-			return this.$store.getters.myData
-			
-		},
-		user() {
-			return this.$store.getters.user
-		},
-		error() {
-			return this.$store.getters.error
-		},
-		onlineUsers() {
-			return this.$store.getters.onlineUsers
-		},
-	},
-	watch: {
-		user(value) {
-			console.log("USER CHANGED")
-			console.log(value)
-			if (value == null || value == undefined) {
-				this.$router.push("/login")
-			}
-		},
-	},
-	created() {
-		// console.log("default layout created")
-		// if (!this.userIsAuthenticated) {
-		// 	console.log("  xfering to login")
-		// 	this.$router.push("/login")
-		// }
-		window.addEventListener(
-			"batterystatus",
-			this.updateBatteryStatus,
-			false,
-		)
+  name: "LayoutDefault",
+  data() {
+    return {
+      leftDrawerOpen: true,
+      search: " ",
+      footer: true,
+      batteryStatus: "determining..."
+    };
+  },
+  // beforeRouteEnter(to, from, next) {
+  // 	var vm = this
+  // 	if (!store.getters.user) {
+  // 		router.push("/login")
+  // 	}
+  // },
+  computed: {
+    userIsAuthenticated() {
+      return (
+        this.$store.getters.user !== null &&
+        this.$store.getters.user !== undefined
+      );
+    },
+    currentTimeSheet() {
+      return this.$store.getters.currentTimeSheet;
+    },
+    user() {
+      return this.$store.getters.user;
+    },
+    error() {
+      return this.$store.getters.error;
+    },
+    onlineUsers() {
+      return this.$store.getters.onlineUsers;
+    },
+    location() {
+      return this.$getLocation();
+    }
+  },
+  watch: {
+    user(value) {
+      console.log("USER CHANGED");
+      console.log(value);
+      if (value == null || value == undefined) {
+        this.$router.push("/login");
+      }
+    }
+  },
+  created() {
+    // console.log("default layout created")
+    // if (!this.userIsAuthenticated) {
+    // 	console.log("  xfering to login")
+    // 	this.$router.push("/login")
+    // }
+    window.addEventListener("batterystatus", this.updateBatteryStatus, false);
 
-		this.$store.dispatch("loadOnlineUsers")
-	},
-	beforeDestroy() {
-		// we make some cleanup;
-		// we need to remove the event listener
-		window.removeEventListener(
-			"batterystatus",
-			this.updateBatteryStatus,
-			false,
-		)
-	},
-	methods: {
-		clockOut() {
-			var vm = this
-			this.$store
-				.dispatch("clockUserOutDeputy", {})
-				.then(function() {
-					// Notify.create("You have been loged out")
-					// vm.$router.push({ path: "/" })
-				})
-				.catch(function(error) {
-					console.log(error)
-				})
-		},
-		clockIn() {
-			var vm = this
-			this.$store
-				.dispatch("clockUserInDeputy", {})
-				.then(function() {
-					// Notify.create("You have been loged out")
-					// vm.$router.push({ path: "/" })
-				})
-				.catch(function(error) {
-					console.log(error)
-				})
-		},
-		updateBatteryStatus(status) {
-			this.batteryStatus = `Level: ${status.level}, plugged: ${
-				status.isPlugged
-			}`
-		},
-		// openURL,
-		logOut(reason) {
-			var vm = this
-			this.$store
-				.dispatch("signUserOut", {})
-				.then(function() {
-					Notify.create("You have been loged out")
-					vm.$router.push({ path: "/" })
-				})
-				.catch(function(error) {
-					console.log(error)
-				})
-		},
-		beforeDestroy() {
-			// we make some cleanup;
-			// we need to remove the event listener
-			window.removeEventListener(
-				"batterystatus",
-				this.updateBatteryStatus,
-				false,
-			)
-		},
-	},
-}
+    // var position = this.$vuexGeolocation.getCurrentPosition(10);
+
+    this.$store.dispatch("loadOnlineUsers");
+  },
+  beforeDestroy() {
+    // we make some cleanup;
+    // we need to remove the event listener
+    window.removeEventListener(
+      "batterystatus",
+      this.updateBatteryStatus,
+      false
+    );
+  },
+  methods: {
+    clockOut() {
+      var vm = this;
+      this.$store
+        .dispatch("clockUserOutDeputy", {})
+        .then(function() {
+          // Notify.create("You have been loged out")
+          // vm.$router.push({ path: "/" })
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    clockIn() {
+      var vm = this;
+      this.$store
+        .dispatch("clockUserInDeputy", {})
+        .then(function() {
+          // Notify.create("You have been loged out")
+          // vm.$router.push({ path: "/" })
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    updateBatteryStatus(status) {
+      this.batteryStatus = `Level: ${status.level}, plugged: ${
+        status.isPlugged
+      }`;
+    },
+    // openURL,
+    logOut(reason) {
+      var vm = this;
+      this.$store
+        .dispatch("signUserOut", {})
+        .then(function() {
+          Notify.create("You have been loged out");
+          vm.$router.push({ path: "/" });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    beforeDestroy() {
+      // we make some cleanup;
+      // we need to remove the event listener
+      window.removeEventListener(
+        "batterystatus",
+        this.updateBatteryStatus,
+        false
+      );
+    }
+  }
+};
 </script>
 
 <style scoped>
 img.avatar {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
-		0 2px 1px -1px rgba(0, 0, 0, 0.12);
-	vertical-align: bottom;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
+  vertical-align: bottom;
 }
 #profile {
-	height: 120px;
+  height: 120px;
 }
 </style>

@@ -3,11 +3,11 @@
 module.exports = function(ctx) {
   return {
     // app plugins (/src/plugins)
-    plugins: ["axios", "firebase", "vuelidate"],
+    plugins: ["axios", "firebase", "vuelidate", "vuex-loc"],
     css: ["app.styl"],
     extras: [
       ctx.theme.mat ? "roboto-font" : null,
-      "material-icons",
+      "material-icons"
       // 'ionicons',
       // 'mdi',
       // 'fontawesome'
@@ -15,7 +15,7 @@ module.exports = function(ctx) {
     supportIE: false,
     vendor: {
       add: [],
-      remove: [],
+      remove: []
     },
     build: {
       scopeHoisting: true,
@@ -24,13 +24,13 @@ module.exports = function(ctx) {
       // analyze: true,
       // extractCSS: false,
       // useNotifier: false,
-      extendWebpack(cfg) {},
+      extendWebpack(cfg) {}
     },
     devServer: {
       // https: true,
       // port: 8080,
       open: false, // opens browser window automatically
-      clientLogLevel: "none",
+      clientLogLevel: "none"
     },
     framework: "all", //TODO remove this later on
     // framework: {
@@ -88,30 +88,30 @@ module.exports = function(ctx) {
           {
             src: "statics/icons/icon-128x128.png",
             sizes: "128x128",
-            type: "image/png",
+            type: "image/png"
           },
           {
             src: "statics/icons/icon-192x192.png",
             sizes: "192x192",
-            type: "image/png",
+            type: "image/png"
           },
           {
             src: "statics/icons/icon-256x256.png",
             sizes: "256x256",
-            type: "image/png",
+            type: "image/png"
           },
           {
             src: "statics/icons/icon-384x384.png",
             sizes: "384x384",
-            type: "image/png",
+            type: "image/png"
           },
           {
             src: "statics/icons/icon-512x512.png",
             sizes: "512x512",
-            type: "image/png",
-          },
-        ],
-      },
+            type: "image/png"
+          }
+        ]
+      }
     },
     cordova: {
       // id: 'org.cordova.quasar.app'
@@ -128,10 +128,10 @@ module.exports = function(ctx) {
         // protocol: 'myapp://path',
         // Window only
         // win32metadata: { ... }
-      },
+      }
     },
 
     // leave this here for Quasar CLI
-    starterKit: "1.0.0",
-  }
-}
+    starterKit: "1.0.0"
+  };
+};
