@@ -1,0 +1,1 @@
+[{"id":"3892b05b.6eb86","type":"http in","z":"f2f0aa2e.390148","name":"","url":"","method":"get","upload":false,"x":200,"y":220,"wires":[["e8e7bc4e.d6ead"]]},{"id":"e8e7bc4e.d6ead","type":"http response","z":"f2f0aa2e.390148","name":"","statusCode":"","headers":{},"x":390,"y":220,"wires":[]}]

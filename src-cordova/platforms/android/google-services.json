@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "734746045873",
+    "firebase_url": "https://andrewsadmin.firebaseio.com",
+    "project_id": "andrewsadmin",
+    "storage_bucket": "andrewsadmin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734746045873:android:f66a5da1b36f4190",
+        "android_client_info": {
+          "package_name": "org.cordova.andrews.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "734746045873-c67cds8abkno1b19htrtd11ea3753b0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.cordova.andrews.app",
+            "certificate_hash": "0710db4370e2274343e00b054145c3261d9559ba"
+          }
+        },
+        {
+          "client_id": "734746045873-r0ef8235ut0bhm4ba6n7bkur168fpci8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyDSdxK0ohKJ6J4SWVy_Pwi23iUi7sqIk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "734746045873-r0ef8235ut0bhm4ba6n7bkur168fpci8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

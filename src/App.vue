@@ -22,10 +22,10 @@ export default {
     //     })
     //   }
     console.log("loaded");
-    this.$getLocation().then(coordinates => {
-      console.log("logging coords");
-      console.log(coordinates);
-    });
+    // this.$getLocation().then(coordinates => {
+    //   console.log("logging coords");
+    //   console.log(coordinates);
+    // });
   }
 };
 </script>

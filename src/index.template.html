@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova) { %>, viewport-fit=cover<% } %>">
-    <title><%= htmlWebpackPlugin.options.productName %></title>
-    <base href="<%= htmlWebpackPlugin.options.appBase %>">
 
-    <link rel="icon" href="statics/quasar-logo.png" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="statics/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="statics/icons/favicon-16x16.png">
-    <!-- <script src="https://cdn.ravenjs.com/3.23.1/vue/raven.min.js" crossorigin="anonymous"></script> -->
-    <!-- <script>Raven.config('https://d0b20f6d31064931874bd4b5bff2a729@sentry.io/303302').install();</script> -->
-    <% if (htmlWebpackPlugin.options.ctx.mode.pwa) { %>
+<head>
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova) { %>, viewport-fit=cover<% } %>">
+  <title>
+    <%= htmlWebpackPlugin.options.productName %>
+  </title>
+  <base href="<%= htmlWebpackPlugin.options.appBase %>">
+
+  <link rel="icon" href="statics/quasar-logo.png" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="statics/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="statics/icons/favicon-16x16.png">
+  <!-- <script src="https://cdn.ravenjs.com/3.23.1/vue/raven.min.js" crossorigin="anonymous"></script> -->
+  <!-- <script>Raven.config('https://d0b20f6d31064931874bd4b5bff2a729@sentry.io/303302').install();</script> -->
+  <% if (htmlWebpackPlugin.options.ctx.mode.pwa) { %>
     <!-- Add to home screen for Android and modern mobile browsers -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="<%= htmlWebpackPlugin.options.pwaManifest.theme_color %>">
@@ -27,33 +30,37 @@
     <meta name="msapplication-TileColor" content="<%= htmlWebpackPlugin.options.pwaManifest.background_color %>">
     <% } %>
 
-    <%= htmlWebpackPlugin.options.headScripts %>
+      <%= htmlWebpackPlugin.options.headScripts %>
 
-    <!--
+        <!--
       The following is optional if you DON'T build for PWA.
       Preloads/prefetches chunks/assets.
     -->
-    <% if (!['cordova', 'electron'].includes(htmlWebpackPlugin.options.ctx.modeName) && htmlWebpackPlugin.options.ctx.prod) {
+        <% if (!['cordova', 'electron'].includes(htmlWebpackPlugin.options.ctx.modeName) && htmlWebpackPlugin.options.ctx.prod) {
         for (var chunk of webpack.chunks) {
           for (var file of chunk.files) {
             if (file.match(/\.(js|css)$/)) { %>
-      <link rel="<%= chunk.initial ? 'preload' : 'prefetch' %>" href="<%= file %>" as="<%= file.match(/\.css$/)? 'style' : 'script' %>">
-    <% }}}} %>
+          <link rel="<%= chunk.initial ? 'preload' : 'prefetch' %>" href="<%= file %>" as="<%= file.match(/\.css$/)? 'style' : 'script' %>">
+          <% }}}} %>
 
-  </head>
-  <body>
-    <% if (!htmlWebpackPlugin.options.ctx.mode.electron) { %>
-      <noscript>
-        This is your fallback content in case JavaScript fails to load.
-      </noscript>
+</head>
+
+<body>
+  <% if (!htmlWebpackPlugin.options.ctx.mode.electron) { %>
+    <noscript>
+      This is your fallback content in case JavaScript fails to load.
+    </noscript>
     <% } %>
+      <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmwNvsV8ANcjbaAhgdrNhx39Qst6EUEeo"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 
-    <!-- DO NOT touch the following <div> -->
-    <div id="q-app"></div>
+      <!-- DO NOT touch the following <div> -->
+      <div id="q-app"></div>
 
-    <!-- DO NOT touch the following -->
-    <%= htmlWebpackPlugin.options.bodyScripts %>
+      <!-- DO NOT touch the following -->
+      <%= htmlWebpackPlugin.options.bodyScripts %>
 
-    <!-- built files will be auto injected here -->
-  </body>
+        <!-- built files will be auto injected here -->
+</body>
+
 </html>

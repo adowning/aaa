@@ -17,7 +17,7 @@
         </q-toolbar-title>
         <q-search inverted v-model="search" color="none" value="x" class="q-mr-xl" />
 		
-                <span>{{user.username}}</span>
+                <span>{{user.name}}</span>
 		
                     <q-btn flat round dense icon="exit to app" label="Logout"  @click="logOut()"></q-btn>
       </q-toolbar>
@@ -41,30 +41,40 @@
       </div>
 			  <!-- <div class="row justify-center q-mt-sm"> -->
 						  <div class="row justify-center q-pt-sm" >
-			 <span style="color: white; "><strong>{{user.username}}</strong></span>
+			 <span style="color: white; "><strong>{{user.name}}</strong></span>
        </div>
 						  <div class="row justify-center " >
-			 
+			 <div v-if="user.employee_type != 5">
 			 <span style="color: purple;" v-if="currentTimeSheet">Clocked In</span>
-			 <span class="q-body-1" v-else>No scheduled shifts</span>
-			 
-			 <!-- <div class="q-caption">Administration Applicat</div>  -->
+			 <span class="q-body-1" v-else>You are not clocked in</span>
+			 </div>
+			 <div v-else>
+         		 <span style="color: purple;" v-if="currentTimeSheet">Billing Hours Started</span>
+               <span class="q-body-1" v-else>Contractor</span>
+       </div>
 						  </div>
-       <!-- </div> -->
-			 
+       
 			<div class="row justify-center q-mt-md" >
       <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
+			<template v-if="user.employee_type != 5">
+      
 			<template v-if="currentTimeSheet">
-				<template v-if="user.employee_type == 'contractor'">
-					contractor
-				</template>
-				<template v-if="user.employee_type != 'contractor'">
 				<q-btn size="sm" color="secondary" label="Start Break"/>
 			<p style="padding-left: 5px;"></p> 
-      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut()"/> </template> </template>
-     <q-btn size="sm" color="secondary" label="Clock In" @click="clockIn()" v-else/>
+      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut(false)"/> </template> 
+     <q-btn size="sm" color="secondary" label="Clock In" @click="clockIn(false)" v-else/>
+ </template>
+			<template v-else>
   
-			
+			<template v-if="currentTimeSheet">
+				<q-btn size="sm" color="secondary" label="Start Break"/>
+			<p style="padding-left: 5px;"></p> 
+      <q-btn size="sm" color="secondary" label="Stop Billing" @click="clockOut(true)"/> </template> 
+     <q-btn size="sm" color="secondary" label="Start Billing" @click="clockIn(true)" v-else/>
+
+      </template>
+ 
+			<template
 			</div>
 			<hr>
      <div row>
@@ -75,38 +85,46 @@
       </q-item>
        <q-item to="/dashboard"  >
         <q-item-side icon="local shipping" />
-        <q-item-main label="Dashboard"  />
+        <q-item-main style="color: grey;" label="Dashboard"  />
       </q-item>
   <q-collapsible indent icon="devices other" label="Assets" >
       <q-item to="/hardware">
         <q-item-main label="Hardware"  />
       </q-item>
            <q-item to="/consumables">
-        <q-item-main label="Consumables"  />
+        <q-item-main  label="Consumables"  />
       </q-item>
                  <q-item to="/groups">
-        <q-item-main label="Groups"  />
+        <q-item-main style="color: grey;" label="Groups"  />
       </q-item>
   </q-collapsible>
    <q-item to="/workshop">
         <q-item-side icon="build" />
-        <q-item-main label="Work Shop"  />
+        <q-item-main style="color: grey;" label="Work Shop"  />
       </q-item>
   <q-collapsible indent icon="person" label="Employees" >
       <q-item to="/directory">
         <q-item-main label="Directory"/>
       </q-item>
+         <q-item to="/nowhere">
+        <q-item-main style="color: grey;" label="Applicants"/>
+      </q-item>
      <q-item :to="'/profile?id='+user.emp_id+''">
         <q-item-main label="My Profile"/>
       </q-item>
   </q-collapsible>
+    <q-item to="/services">
+        <q-item-side icon="assignment" />
+        <q-item-main style="color: grey;" label="Customer Center"  />
+      </q-item>
    <q-item to="/services">
         <q-item-side icon="assignment" />
-        <q-item-main label="Documents"  />
+        <q-item-main style="color: grey;" label="Documents"  />
       </q-item>
+       
        <q-item to="/logs">
         <q-item-side icon="list" />
-        <q-item-main label="Logs"  />
+        <q-item-main style="color: grey;" label="Logs"  />
       </q-item>
 </q-list>
 
@@ -119,13 +137,74 @@
       <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #b48ead !important; color:#4c566a;">
         <div class="row items-center">
            <!-- Battery status is: <strong>{{ batteryStatus }}</strong> -->
-					Coords: {{location}}
+					<!-- Coords: {{location}} -->
         </div>
       </q-toolbar>
     </q-layout-footer>
+     <q-modal v-model="opened" :content-css="{minWidth: '50vw', minHeight: '70vh'}">
+  <q-modal-layout>
+    <!-- <q-toolbar slot="header"> -->
+      <!-- <q-btn
+        flat
+        round
+        dense
+        v-close-overlay
+        icon="keyboard_arrow_left"
+      />
+      -->
+    <!-- </q-toolbar> -->
+
+    <q-toolbar slot="header">
+    Enter 
+    </q-toolbar>
+
+    <q-toolbar slot="footer">
+         <q-btn
+        color="primary"
+        v-close-overlay
+        label="Submit"
+        @click="contractorLogin()"
+      />
+         <q-btn
+        color="primary"
+        v-close-overlay
+        label="Cancel"
+      />
+      </q-toolbar-title>
+      
+    </q-toolbar>
+<q-alert
+          color="warning"
+          inline
+          class="q-mb-md"
+        > I plan to tie this into the assets we have to track what is costing what. If you make a mistake or forget to clock in be sure to let me know so I can adjust. </q-alert>
+    <div class="layout-padding">
+ <!-- Single Line Input -->
+ <q-form>
+
+<label dark>Enter equipment you plan to work on:</label>
+<q-input v-model="item1" float-label="Item 1" placeholder="" />
+<q-input v-model="item2" float-label="Item 2" placeholder="" />
+<q-input v-model="item3" float-label="Item 3" placeholder="" />
+<br>
+<!-- Multiple Line Input -->
+<q-input
+  v-model="modal_notes"
+  type="textarea"
+  float-label="Enter notes here and please include what was originally wrong"
+  :max-height="100"
+  rows="7"
+/><!-- max-height refers to pixels -->
+ </q-form>
+
+     
+      <!-- <p>Enter notes here</p> -->
+    </div>
+  </q-modal-layout>
+</q-modal>
   </q-layout>
 </template>
-
+</template>
 <script>
 import { openURL } from "quasar";
 import router from "../router";
@@ -137,6 +216,11 @@ export default {
   name: "LayoutDefault",
   data() {
     return {
+      item1: "",
+      item2: "",
+      item3: "",
+      modal_notes: "",
+      opened: false,
       leftDrawerOpen: true,
       search: " ",
       footer: true,
@@ -167,10 +251,10 @@ export default {
     },
     onlineUsers() {
       return this.$store.getters.onlineUsers;
-    },
-    location() {
-      return this.$getLocation();
     }
+    // location() {
+    //   return this.$getLocation();
+    // }
   },
   watch: {
     user(value) {
@@ -203,7 +287,18 @@ export default {
     );
   },
   methods: {
-    clockOut() {
+    contractorLogin() {
+      var notes =
+        this.item1 +
+        "," +
+        this.item1 +
+        "," +
+        this.item1 +
+        "," +
+        this.modal_notes;
+      console.log(notes);
+    },
+    clockOut(contractor) {
       var vm = this;
       this.$store
         .dispatch("clockUserOutDeputy", {})
@@ -215,7 +310,10 @@ export default {
           console.log(error);
         });
     },
-    clockIn() {
+    clockIn(contractor) {
+      if (contractor) {
+        this.opened = true;
+      }
       var vm = this;
       this.$store
         .dispatch("clockUserInDeputy", {})

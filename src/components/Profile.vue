@@ -20,7 +20,9 @@
                       <q-item>
                         <q-item-side label>Position:</q-item-side>
                        <q-item-main>
-                        <q-item-tile>{{user.group_name}}</q-item-tile>
+
+                        <q-item-tile v-if="user.employee_type != 5">{{user.group_name}}</q-item-tile>
+                        <q-item-tile v-else>Contractor</q-item-tile>
                          </q-item-main>
                       </q-item>
                       <q-item>
@@ -55,7 +57,30 @@
                 </div>
                     </div>
         </q-tab-pane>
-        <q-tab-pane name="alarms">Checked Assets</q-tab-pane>
+        <q-tab-pane name="alarms">
+			<template>
+  <q-table
+    ref="table"
+    :data="serverData"
+    :columns="columns"
+    :filter="filter"
+    row-key="name"
+    :pagination.sync="serverPagination"
+    :loading="loading"
+    @request="request"
+  >  
+   <q-tr slot="body" slot-scope="props" :props="props">
+
+    <q-td key="asset_tag" :props="props">{{ props.row.asset_tag }}</q-td>
+
+         <q-td key="model" :props="props">{{ props.row.model.name }}</q-td>
+        <q-td key="category" :props="props">{{ props.row.category.name }}</q-td>
+   
+   </q-tr>
+  </q-table>
+  <h5 v-if="serverData.length < 1">You have nothing checked out to you</h5>
+</template>
+		</q-tab-pane>
         <q-tab-pane name="movies">
 			<q-list>
 				
@@ -123,6 +148,8 @@
 <script>
 // import auth from "../utils/auth";
 // import store from "../store";
+import Vue from "vue";
+
 import firebase from "./firebaseInit";
 
 export default {
@@ -139,10 +166,37 @@ export default {
     }
   },
   data: () => ({
-    // profile: {},
-    // userInfo: {},
-    // imageURL: "",
-    // okShow: false,
+    filter: "",
+    loading: false,
+    serverPagination: {
+      page: 1,
+      rowsNumber: 10 // specifying this determines pagination is server-side
+    },
+
+    serverData: [],
+    columns: [
+      {
+        name: "asset_tag",
+        label: "Asset Tag",
+        field: "asset_tag",
+        align: "left",
+        sortable: true
+      },
+      {
+        name: "model",
+        label: "Model",
+        field: "model",
+        align: "left",
+        sortable: true
+      },
+      {
+        name: "category",
+        label: "Category",
+        field: "category",
+        align: "left",
+        sortable: true
+      }
+    ],
     imageSrc: "",
 
     errors: [],
@@ -160,10 +214,10 @@ export default {
     },
     error() {
       return this.$store.getters.error;
-    },
-    loading() {
-      return this.$store.getters.loading;
     }
+    // loading() {
+    //   return this.$store.getters.loading;
+    // }
   },
   watch: {
     user(value) {
@@ -174,18 +228,52 @@ export default {
       }
     }
   },
+  mounted() {},
   created() {
     window.addEventListener("batterystatus", this.updateBatteryStatus, false);
     var id = 1;
     this.$snipeit
       .post(`hardware/users/${id}/assets`, { sid: 1 })
       .then(response => {
-        console.log(reponse.rows);
+        console.log(response.data);
       });
+    this.request({
+      pagination: this.serverPagination,
+      filter: this.filter
+    });
 
     console.log(this.$route.query.id); // outputs 'yay'
   },
   methods: {
+    request({ pagination, filter }) {
+      // we set QTable to "loading" state
+      this.loading = true;
+
+      // we do the server data fetch, based on pagination and filter received
+      // (using Axios here, but can be anything; parameters vary based on backend implementation)
+
+      this.$snipeit
+        .post(`hardware/users/1/assets`, { sid: 1 })
+        .then(({ data }) => {
+          // updating pagination to reflect in the UI
+          // this.serverPagination = pagination
+          this.serverPagination.rowsNumber = data.rowsNumber;
+
+          // we also set (or update) rowsNumber
+          this.serverPagination.rowsNumber = data.rowsNumber;
+
+          // then we update the rows with the fetched ones
+          this.serverData = data.rows;
+
+          // finally we tell QTable to exit the "loading" state
+          this.loading = false;
+        })
+        .catch(error => {
+          // there's an error... do SOMETHING
+          // we tell QTable to exit the "loading" state
+          //   this.loading = false;
+        });
+    },
     captureImage() {
       navigator.camera.getPicture(
         data => {

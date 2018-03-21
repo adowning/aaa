@@ -10,7 +10,7 @@
 							<img style="width: 300px; height: 280px;" src="../statics/logo.png" size= />
         <div class="input-group ">
           <span class="input-group-addon "><i class="fa fa-envelope"></i></span>
-          <input class="form-control " name="email" placeholder="Email" type="text" v-model="email"><br>
+          <input class="form-control " name="email" placeholder="Email" type="email" v-model="email"><br>
         <!-- </div>
         <div class="input-group  "> -->
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
@@ -24,6 +24,7 @@
            <q-btn  color="primary" @click="onSignin('a@a.com', 'asdfasdf', 'aname')">A Submit</q-btn>
            <q-btn  color="primary" @click="onSignin('b@b.com', 'asdfasdf', 'bname')">B Submit</q-btn>
            <q-btn  color="primary" @click="onSignin('c@c.com', 'asdfasdf', 'cname')">C Submit</q-btn>
+           <q-btn  color="primary" @click="onSignin('john.w@andrewscarpetcleaning.com', 'Andrews1', 'cname')">john weldon</q-btn>
 		</div>
 				<div class="q-pa-sm" v-if="devMode == 'development'">
 					 <!-- <input class="form-control " name="email" placeholder="Email" type="text" v-model="newemail"><br>
@@ -37,12 +38,12 @@
 						
           </div>
 		       <div class="row justify-center">
-        <!-- <q-alert
+        <q-alert
           color="warning"
           inline
           class="q-mb-lg"
-        > Sometimes you will need to click on the submit button twice, I cant seem to track the bug down </q-alert>
-    -->  </div> 
+        > Any links in the menu to the left that are grey is becuase I only want to test just a few features at a time. I will turn on the other features after the bugs are worked out of what I have open now </q-alert>
+     </div> 
         </div>
       </div>
     </q-page>
@@ -54,9 +55,10 @@ import { required, email } from "vuelidate/lib/validators";
 import { Notify } from "quasar";
 import router from "../router";
 // import firebase from "./firebaseInit";
+
 import axios from "axios";
 var humanityService = axios.create({
-  baseURL: "http://47.219.112.177:1880/api",
+  baseURL: "http://47.219.112.177:8000/api",
   timeout: 8000
 });
 
@@ -96,6 +98,7 @@ export default {
       if (!username) {
         username = "none";
       }
+
       var vm = this;
       window.localStorage.clear();
       window.sessionStorage.clear();

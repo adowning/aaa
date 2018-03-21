@@ -52,14 +52,19 @@ plugins.push(pluginFirebase)
 import pluginVuelidate from 'src/plugins/vuelidate'
 plugins.push(pluginVuelidate)
 
-import pluginVuexloc from 'src/plugins/vuex-loc'
-plugins.push(pluginVuexloc)
-
 plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 
 
 
+
+import FastClick from 'fastclick'
+// Needed only for iOS PWAs
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
+  document.addEventListener('DOMContentLoaded', () => {
+    FastClick.attach(document.body)
+  }, false)
+}
 
 
 

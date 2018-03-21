@@ -97,28 +97,23 @@ const AuthModule = {
         });
     },
     signUserIn({ commit }, payload) {
-      commit("setUser", payload);
-      // firebase
-      //   .auth()
-      //   .signInWithEmailAndPassword(payload.email, "asdfasdf")
-      //   .catch(function(error) {
-      //     // Handle Errors here.
-      //     var errorCode = error.code;
-      //     var errorMessage = error.message;
-      //     console.log(errorMessage);
-      //     return;
-      //   })
-      //   .then(user => {
-      //     humanityService
-      //       .post("/updateClockStatus/", {
-      //         email: payload.email
-      //       })
-      //       .then(response => {
-      //         commit("setUser", response);
-      //       })
-      //       .catch(error => {
-      //         console.log(error);
-      //       });
+      console.log(payload);
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(payload.user.data.data.email, "asdfasdf")
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorMessage);
+          return;
+        })
+        .then(user => {
+          commit("setUser", payload);
+        })
+        .catch(error => {
+          console.log(error);
+        });
       // firebase
       //   .database()
       //   .ref("users")

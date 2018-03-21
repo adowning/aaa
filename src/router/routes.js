@@ -1,10 +1,10 @@
-import AuthGuard from "./auth-guard"
+import AuthGuard from "./auth-guard";
 
 export default [
   {
     // Always leave this as last one
     path: "/",
-    component: () => import("components/Login"),
+    component: () => import("components/Login")
   },
   {
     path: "/default",
@@ -12,30 +12,34 @@ export default [
     children: [
       {
         path: "/profile",
-        component: () => import("components/Profile"),
+        component: () => import("components/Profile")
       },
       {
         path: "/liveview",
-        component: () => import("components/LiveView"),
+        component: () => import("components/liveview/LiveView")
       },
       {
         path: "/directory",
-        component: () => import("components/Directory"),
+        component: () => import("components/Directory")
       },
       {
         path: "/hardware",
-        component: () => import("components/hardware/Hardware"),
+        component: () => import("components/hardware/Hardware")
+      },
+      {
+        path: "/consumables",
+        component: () => import("components/Consumables")
       },
       {
         path: "/logs",
-        component: () => import("components/Logs"),
-      },
-    ],
+        component: () => import("components/Logs")
+      }
+    ]
   },
 
   {
     // Always leave this as last one
     path: "*",
-    component: () => import("components/404"),
-  },
-]
+    component: () => import("components/404")
+  }
+];
