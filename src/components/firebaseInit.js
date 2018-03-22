@@ -1,6 +1,3 @@
-// import firebase from "firebase";
-
-// Required for side-effects
 require("firebase/firestore");
 
 var config = {
@@ -11,6 +8,9 @@ var config = {
   storageBucket: "andrewsadmin.appspot.com",
   messagingSenderId: "734746045873"
 };
-const firebase = require("firebase");
-const firebaseApp = firebase.initializeApp(config);
-export default firebaseApp;
+var fbApp = firebase.initializeApp(config);
+var defaultStorage = firebase.storage();
+var defaultDatabase = firebase.database();
+var defaultStore = firebase.firestore();
+
+module.exports = { defaultDatabase, defaultStorage, defaultStore };

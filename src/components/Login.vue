@@ -42,7 +42,7 @@
           color="warning"
           inline
           class="q-mb-lg"
-        > Any links in the menu to the left that are grey is becuase I only want to test just a few features at a time. I will turn on the other features after the bugs are worked out of what I have open now </q-alert>
+        > Any links in the menu to the left that are grey is becuase I only want to test just a few features at a time, I will turn on the other features after the bugs are worked out of what I have open now </q-alert>
      </div> 
         </div>
       </div>
@@ -57,10 +57,10 @@ import router from "../router";
 // import firebase from "./firebaseInit";
 
 import axios from "axios";
-var humanityService = axios.create({
-  baseURL: "http://47.219.112.177:8000/api",
-  timeout: 8000
-});
+// var humanityService = axios.create({
+//   baseURL: "http://47.219.112.177:8000/api",
+//   timeout: 8000
+// });
 
 export default {
   data() {
@@ -89,35 +89,27 @@ export default {
   watch: {
     user(value) {
       if (value !== null && value !== undefined) {
-        this.$router.push("/profile");
+        // this.$router.push("/profile");
+        console.log(user);
       }
     }
   },
   methods: {
-    onSignin(email, pass, username) {
-      if (!username) {
-        username = "none";
-      }
+    onSignin(email, pass) {
+      // if (!username) {
+      //   username = "none";
+      // }
 
       var vm = this;
       window.localStorage.clear();
       window.sessionStorage.clear();
-      console.log(email);
-      humanityService
-        .post("/login", {
+      this.$store
+        .dispatch("signUserIn", {
           email: email,
           password: pass
         })
-        .then(response => {
-          console.log(response);
-          this.$store
-            .dispatch("signUserIn", {
-              user: response
-            })
-            .then(() => {});
-        })
-        .catch(error => {
-          console.log(error);
+        .then(() => {
+          console.log("back");
         });
       //   this.$store
       //     .dispatch("signUserIn", {

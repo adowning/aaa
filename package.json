@@ -39,8 +39,6 @@
     "axios": "^0.17.1",
     "electron-config": "^1.0.0",
     "electron-updater": "^2.21.1",
-    "firebase": "^4.11.0",
-    "firebase-functions": "^0.8.1",
     "lowdash": "^1.2.0",
     "vue2-google-maps": "^0.8.11",
     "vuelidate": "^0.6.2",
