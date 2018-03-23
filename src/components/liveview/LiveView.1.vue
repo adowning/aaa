@@ -130,7 +130,7 @@ export default {
     // }
   },
   beforeDestroy() {
-    this.$mqtt.unsubscribe("owntracks/#");
+    // this.$mqtt.unsubscribe("owntracks/#");
   },
   mounted: function() {
     // this.bounds = new google.maps.LatLngBounds();

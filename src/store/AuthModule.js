@@ -7,14 +7,23 @@ import axios from "axios";
 //   timeout: 1000,
 //   headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
 // });
-var fireFunctions = axios.create({
-  baseURL:
-    "https://us-central1-andrewsadmin.cloudfunctions.net/getUserFromHumanity",
-  // baseURL: "http://localhost:5001/andrewsadmin/us-central1",
-  timeout: 8000,
-  ContentType: "application/json"
-});
+if (process.env.NODE_ENV == "devbbelopment") {
+  console.log(process.env.NODE_ENV);
+  var fireFunctions = axios.create({
+    baseURL: "http://localhost:5001/andrewsadmin/us-central1",
+    timeout: 8000,
+    ContentType: "application/json"
+  });
+} else {
+  console.log(process.env.NODE_ENV);
 
+  var fireFunctions = axios.create({
+    baseURL:
+      "https://us-central1-andrewsadmin.cloudfunctions.net/getUserFromHumanity",
+    timeout: 8000,
+    ContentType: "application/json"
+  });
+}
 const AuthModule = {
   state: {
     user: null,
@@ -23,7 +32,7 @@ const AuthModule = {
   },
   mutations: {
     setUser(state, payload) {
-      var _user = payload;
+      console.log(payload);
       state.user = payload;
     }
   },
@@ -45,7 +54,7 @@ const AuthModule = {
       console.log(payload);
       firebase
         .auth()
-        .signInWithEmailAndPassword(payload.email, "asdfasdf")
+        .signInWithEmailAndPassword(payload.email, "Andrews1")
         .catch(function(error) {
           var errorCode = error.code;
           var errorMessage = error.message;
@@ -53,12 +62,13 @@ const AuthModule = {
           return;
         })
         .then(user => {
-          console.log(user);
+          console.log(user.email);
           fireFunctions
             .post("/getUserFromHumanity", {
-              email: "ash@andrewscarpetcleaning.com"
+              email: user.email
             })
             .then(response => {
+              console.log(response);
               commit("setUser", response);
             });
         })

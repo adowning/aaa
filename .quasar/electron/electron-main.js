@@ -2568,9 +2568,9 @@ exports = module.exports = SemVer;
 // The debug function is excluded entirely from the minified version.
 /* nomin */ var debug;
 /* nomin */ if (typeof process === 'object' &&
-    /* nomin */ Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8081/index.html"}) &&
-    /* nomin */ Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8081/index.html"}).NODE_DEBUG &&
-    /* nomin */ /\bsemver\b/i.test(Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8081/index.html"}).NODE_DEBUG))
+    /* nomin */ Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8080/index.html"}) &&
+    /* nomin */ Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8080/index.html"}).NODE_DEBUG &&
+    /* nomin */ /\bsemver\b/i.test(Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8080/index.html"}).NODE_DEBUG))
   /* nomin */ debug = function() {
     /* nomin */ var args = Array.prototype.slice.call(arguments, 0);
     /* nomin */ args.unshift('SEMVER');
@@ -4361,7 +4361,7 @@ var fs = __webpack_require__(1);
 
 // JavaScript implementation of realpath, ported from node pre-v6
 
-var DEBUG = Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8081/index.html"}).NODE_DEBUG && /fs/.test(Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8081/index.html"}).NODE_DEBUG);
+var DEBUG = Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8080/index.html"}).NODE_DEBUG && /fs/.test(Object({"NODE_ENV":"development","DEV":true,"PROD":false,"THEME":"mat","MODE":"electron","VUE_ROUTER_MODE":"hash","VUE_ROUTER_BASE":"/","APP_URL":"http://localhost:8080/index.html"}).NODE_DEBUG);
 
 function rethrow() {
   // Only enable in debug mode. A backtrace uses ~1000 bytes of heap space and
@@ -5662,11 +5662,11 @@ function createWindow() {
   };
   __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default()(opts, config.get("winBounds"));
   win = new __WEBPACK_IMPORTED_MODULE_1_electron__["BrowserWindow"](opts);
-  win.loadURL("http://localhost:8081/index.html");
+  win.loadURL("http://localhost:8080/index.html");
 
   win.once("ready-to-show", win.show);
 
-  win.loadURL("http://localhost:8081/index.html");
+  win.loadURL("http://localhost:8080/index.html");
 
   win.on("close", function () {
     config.set("winBounds", win.getBounds());

@@ -56,15 +56,10 @@ plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 
 
+import electron from 'electron'
+Vue.prototype.$q.electron = electron
 
 
-import FastClick from 'fastclick'
-// Needed only for iOS PWAs
-if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && window.navigator.standalone) {
-  document.addEventListener('DOMContentLoaded', () => {
-    FastClick.attach(document.body)
-  }, false)
-}
 
 
 
