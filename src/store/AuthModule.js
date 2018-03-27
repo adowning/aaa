@@ -1,12 +1,11 @@
-//  import firebase from "firebase"
-// import * as firebase from "firebase"
 import { defaultStore } from "../components/firebaseInit";
 import axios from "axios";
-// var deputyService = axios.create({
-//   baseURL: 'https://054b6b12055851.na.deputy.com/api/v1',
-//   timeout: 1000,
-//   headers: {'Authorization': 'Oauth 89baa4d77fde8740da6e1e716595a198'}
-// });
+
+const api = axios.create({
+  baseURL: "https://node-red.ashdevtools.com/api",
+  timeout: 8000
+});
+
 if (process.env.NODE_ENV == "devbbelopment") {
   console.log(process.env.NODE_ENV);
   var fireFunctions = axios.create({
@@ -37,12 +36,34 @@ const AuthModule = {
     }
   },
   actions: {
+    adjustTimeClock({ commit }, payload) {
+      commit("setLoading", true);
+      humanityService
+        .post("/timesheet/", {
+          intEmployeeId: 1,
+          intOpunitId: 3,
+          action: "start"
+        })
+        .then(response => {
+          if (response.data.code == 700) {
+            commit("setClockStatus", response.data.timesheet);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
     signUserOut({ commit }, payload) {
       commit("setLoading", true);
-      firebase.databaseURL = "https://andrewsadmin.firebaseio.com";
+      // firebase.databaseURL = "https://andrewsadmin.firebaseio.com";
       firebase
         .auth()
         .signOut()
+        .then(x => {
+          console.log(x);
+          commit("setUser", null);
+        })
         .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
@@ -51,7 +72,8 @@ const AuthModule = {
         });
     },
     signUserIn({ commit }, payload) {
-      console.log(payload);
+      commit("setLoading", true);
+      var $this = this;
       firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, "Andrews1")
@@ -62,14 +84,18 @@ const AuthModule = {
           return;
         })
         .then(user => {
-          console.log(user.email);
-          fireFunctions
-            .post("/getUserFromHumanity", {
-              email: user.email
-            })
+          console.log("new " + user.email);
+          axios
+            .post(
+              // "https://bc3d9327.ngrok.io:1880/api/humanity/updateClockStatus",
+              "https://58384bf4.ngrok.io/red/api/login",
+              {
+                email: user.email
+              }
+            )
             .then(response => {
-              console.log(response);
-              commit("setUser", response);
+              console.log(response.data.data);
+              commit("setUser", response.data.data);
             });
         })
         .catch(error => {

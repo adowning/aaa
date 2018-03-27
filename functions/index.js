@@ -25,7 +25,7 @@ exports.getUserFromHumanity = functions.https.onRequest((req, res) => {
         querystring.stringify(payload)
       )
       .catch(error => {
-        console.log(error);
+        console.error(new Error("message"));
         res.end(error);
       })
       .then(response => {
@@ -35,7 +35,7 @@ exports.getUserFromHumanity = functions.https.onRequest((req, res) => {
         );
       })
       .catch(error => {
-        console.log(error);
+        console.error(new Error("message"));
         res.end(error);
       })
       .then(response => {
@@ -53,7 +53,7 @@ exports.getUserFromHumanity = functions.https.onRequest((req, res) => {
         // res.status(400).send("user not found");
       })
       .catch(error => {
-        console.log(error);
+        console.error(new Error("message"));
         res.end(error);
       })
       .then(response => {
@@ -68,7 +68,7 @@ exports.getUserFromHumanity = functions.https.onRequest((req, res) => {
         res.end({ user: user });
       })
       .catch(error => {
-        console.log(error);
+        console.error(new Error("message"));
         res.end(error);
       });
     res.end(555);

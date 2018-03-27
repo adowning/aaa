@@ -34,7 +34,6 @@
         <div slot="visible">
         <div style="bottom: 0; left: 0; background-color: #8fbcbb; color: white; position: absolute; z-index: 100">
                 {{infoContent}}
-
         </div>
       </div>
         </gmap-map>
@@ -93,9 +92,11 @@ export default {
       // map options
       center: { lat: 32.3173, lng: -95.2473 },
 
-      zoom: 12,
+      zoom: 8,
       options: {
         maxZoom: 16,
+        // zoom: 20,
+
         mapTypeId: "roadmap",
         styles: [
           {
@@ -153,6 +154,7 @@ export default {
     toggleInfoWindow: function(marker, idx) {
       this.infoWindowPos = marker.position;
       this.infoContent = marker.infoText;
+      this.infoContent = "asdfasdfadsffds";
       //check if its the same marker that was selected if yes toggle
       if (this.currentMidx == idx) {
         this.infoWinOpen = !this.infoWinOpen;
@@ -201,25 +203,27 @@ export default {
   mounted() {
     let $this = this;
     loaded.then(() => {
-      const db = firebase.firestore();
+      const db = firebase.defaultStore;
       db
-        .collection("trackedAssets")
-        .where("_type", "==", "location")
+        .collection("assetsReporting")
+        .where("type", "==", "location")
         .onSnapshot(function(querySnapshot) {
           // markerManager.clear();
           $this.markers = [];
           querySnapshot.forEach(function(doc) {
-            // console.log(doc.data());
             var data = doc.data();
             var marker = {
-              position: { lat: data.lat, lng: data.lon },
+              position: {
+                lat: data.location.latitude,
+                lng: data.location.longitude
+              },
 
               label: "dfgdfg",
-              ifw2text: data.owner,
-              ifw: true,
-              text: data,
-              statusText: data,
-              infoText: data
+              ifw2text: data.username,
+              ifw: true
+              // text: data.username,
+              // statusText: data.username,
+              // infoText: data.username
             };
             $this.markers.push(marker);
           });

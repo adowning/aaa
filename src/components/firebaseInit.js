@@ -1,4 +1,5 @@
-require("firebase/firestore");
+// require("firebase/firestore");
+// const firebase = require("firebase");
 
 var config = {
   apiKey: "AIzaSyDdspiJ0VAnGLeyRziofRCSld1bpBoms7E",

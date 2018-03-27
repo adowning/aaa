@@ -46,9 +46,6 @@ const plugins = []
 import pluginAxios from 'src/plugins/axios'
 plugins.push(pluginAxios)
 
-import pluginFirebase from 'src/plugins/firebase'
-plugins.push(pluginFirebase)
-
 import pluginVuelidate from 'src/plugins/vuelidate'
 plugins.push(pluginVuelidate)
 

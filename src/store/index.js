@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import firebase from "../components/firebaseInit";
+// import firebase from "../components/firebaseInit";
 import AuthModule from "./AuthModule";
-import HumanityModule from "./HumanityModule";
+// import TimeClockModule from "./TimeClockModule";
 // import ChatModule from "./ChatModule"
 import VuexPersist from "vuex-persist";
 import axios from "axios";
@@ -22,8 +22,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
-    auth: AuthModule,
-    humanity: HumanityModule
+    auth: AuthModule
+    // timeClock: TimeClockModule
   },
   state: {
     loading: false,

@@ -335,9 +335,10 @@ export default {
       var vm = this;
       this.$store
         .dispatch("signUserOut", {})
-        .then(function() {
+        .then(function(x) {
+          console.log(x);
           Notify.create("You have been loged out");
-          vm.$router.push({ path: "/" });
+          //vm.$router.push({ path: "/" });
         })
         .catch(function(error) {
           console.log(error);
