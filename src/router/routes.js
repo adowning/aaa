@@ -24,6 +24,11 @@ export default [
         component: () => import("components/liveview/LiveView")
       },
       {
+        path: "/schedule",
+        component: () => import("components/Schedule")
+      },
+
+      {
         path: "/directory",
         component: () => import("components/Directory")
       },

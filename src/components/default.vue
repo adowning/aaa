@@ -81,18 +81,21 @@
 </q-btn-dropdown>
                   	<q-btn-dropdown  icon="person">
   <!-- dropdown content -->
-  <q-list link>
-    <q-item>
-      <q-item-main>
-        <q-item-tile label>Asset</q-item-tile>
-      </q-item-main>
-    </q-item>
-     <q-item>
-      <q-item-main>
-        <q-item-tile label>Consumable</q-item-tile>
-      </q-item-main>
-    </q-item>
-  </q-list>
+ <q-list link>
+      <q-item v-close-overlay to="/profile">
+        <q-item-side icon="person" inverted color="secondary" />
+        <q-item-main>
+          <q-item-tile label>Profile</q-item-tile>
+        </q-item-main>
+      </q-item>
+      <!-- <q-item-separator inset /> -->
+      <q-item v-close-overlay to="/logout">
+        <q-item-side icon="exit to app" inverted color="secondary" />
+        <q-item-main >
+          <q-item-tile label >Log Out</q-item-tile>
+        </q-item-main>
+      </q-item>
+    </q-list>
 </q-btn-dropdown>
 		<q-btn-dropdown  :label="user.firstname">
   <!-- dropdown content -->
@@ -179,6 +182,10 @@
         <q-item-side icon="local shipping" />
         <q-item-main style="color: grey;" label="Dashboard"  />
       </q-item>
+             <q-item to="/schedule"  >
+        <q-item-side icon="local shipping" />
+        <q-item-main  label="Schedule"  />
+      </q-item>
   <q-collapsible indent icon="devices other" label="Assets" >
       <q-item to="/hardware">
         <q-item-main label="Assets"  />
@@ -222,17 +229,72 @@
 
 </div>
     </q-layout-drawer>
+      <q-layout-drawer
+      side="right"
+      v-model="rightDrawerOpen"
+      background-color="green"
+    
+
+    >
+      <div style="padding: 25px 16px 16px; background-color: #2e3440;">
+     
+    <!-- <div style="width: 500px; max-width: 90vw;"> -->
+      <q-chat-message
+        v-for="(msg, index) in messages"
+        :key="`reg-${index}`"
+        :label="msg.label"
+        :sent="msg.sent"
+        :text-color="msg.textColor"
+        :bg-color="msg.bgColor"
+        :name="msg.name"
+        :avatar="msg.avatar"
+        :text="msg.text"
+        :stamp="msg.stamp"
+      />
+     
+        <q-spinner-dots size="2rem" />
+      </q-chat-message>
+      <q-field
+        icon="chat"
+      
+        :error="error2"
+        error-label="We got an error"
+        :warning="warning2"
+        warning-label="Hey, we got a warning"
+      >
+        <q-input v-model="msg" float-label="Say something funny..." />
+      </q-field>
+
+     <!-- </div> -->
+      </div>
+    </q-layout-drawer>
     <q-page-container>
+            <!-- <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" mode="out-in"> -->
+
       <router-view />
+            <!-- </transition> -->
     </q-page-container>
     <q-layout-footer v-model="footer"  >
-      <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #b48ead !important; color:#4c566a;">
-        <div class="row items-center">
-           <!-- Battery status is: <strong>{{ batteryStatus }}</strong> -->
-					<!-- Coords: {{location}} -->
-        </div>
+      <q-toolbar color="info">
+       
+        <q-toolbar-title>
+       
+        </q-toolbar-title>
+         <div class="row items-center">
+                    <q-btn flat icon="chat" @click="rightDrawerOpen = !rightDrawerOpen" aria-label="Toggle menu on right side" />
+                    </div>
       </q-toolbar>
+      <!-- <q-toolbar :inverted="$q.theme === 'ios'" style="background-color: #b48ead !important; color:#4c566a;">
+        <div class="row items-center">
+           Battery status is: <strong>{{ batteryStatus }}</strong> 
+				Coords: {{location}} 
+        </div>
+        
+      </q-toolbar> -->
+
     </q-layout-footer>
+
+
      <q-modal v-model="opened" :content-css="{minWidth: '50vw', minHeight: '70vh'}">
   <q-modal-layout>
     <!-- <q-toolbar slot="header"> -->
@@ -314,9 +376,111 @@ export default {
       modal_notes: "",
       opened: false,
       leftDrawerOpen: true,
+      rightDrawerOpen: false,
       search: " ",
       footer: true,
-      batteryStatus: "determining..."
+      batteryStatus: "determining...",
+      message: "",
+      messages: [
+        {
+          label: "Friday, 18th"
+        },
+        {
+          name: "Mark",
+          text: ["How are you?"],
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0014.jpg?alt=media",
+          stamp: "Yesterday 13:34"
+        },
+        {
+          name: "Kathy",
+          text: ["I'm good, thank you!", "And you?"],
+          sent: true,
+          textColor: "white",
+          bgColor: "black",
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0011.jpg?alt=media",
+          stamp: "Yesterday at 13:50"
+        },
+        {
+          name: "Kathy",
+          text: ["And you?"],
+          sent: true,
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0011.jpg?alt=media",
+          stamp: "Yesterday at 13:51"
+        },
+        {
+          label: "Saturday, 19th"
+        },
+        {
+          name: "Mark",
+          bgColor: "amber",
+          textColor: "white",
+          text: ["Fine. Nice weather today, right?", "Hmm..."],
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0014.jpg?alt=media",
+          stamp: "13:55"
+        },
+        {
+          label: "Sunday, 20th"
+        },
+        {
+          name: "Mark",
+          text: ["How are you?"],
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0014.jpg?alt=media",
+          stamp: "Yesterday 13:34"
+        },
+        {
+          name: "Kathy",
+          text: ["I'm good, thank you!", "And you?"],
+          sent: true,
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0011.jpg?alt=media",
+          stamp: "Yesterday at 13:50"
+        },
+        {
+          name: "Kathy",
+          text: ["And you?"],
+          sent: true,
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0011.jpg?alt=media",
+          stamp: "Yesterday at 13:51"
+        },
+        {
+          label: "Monday, 20th"
+        },
+        {
+          name: "Mark",
+          text: ["Fine. Nice weather today, right?", "Hmm..."],
+          avatar:
+            "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0014.jpg?alt=media",
+          stamp: "13:55"
+        },
+        {
+          label: "Tuesday, 21th"
+        }
+
+        // {
+        //   name: "Jane",
+        //   text: ["And you?"],
+        //   sent: true,
+        //   avatar:
+        //     "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0011.jpg?alt=media",
+        //   stamp: "Yesterday at 13:51"
+        // },
+        // {
+        //   label: "Sunday, 19th"
+        // },
+        // {
+        //   name: "Vladimir",
+        //   text: ["Fine. Nice weather today, right?", "Hmm..."],
+        //   avatar:
+        //     "https://firebasestorage.googleapis.com/v0/b/andrewsadmin.appspot.com/o/profilePhotos%2F0014.jpg?alt=media",
+        //   stamp: "13:55"
+        // }
+      ]
     };
   },
   // beforeRouteEnter(to, from, next) {
@@ -443,14 +607,14 @@ export default {
 
 <style scoped>
 img.avatar {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 0.14),
     0 2px 1px -1px rgba(0, 0, 0, 0.12);
-  vertical-align: bottom;
+  vertical-align: top;
 }
 #profile {
-  height: 85px;
+  height: 100px;
 }
 </style>

@@ -4,7 +4,7 @@
 <q-alert
           color="warning"
           inline
-          class="q-mb-md"
+          class="q-ma-sm"
         > I have left most of the features for the map off until the basics are tested.</q-alert>
 
     <div id="googleMap">
