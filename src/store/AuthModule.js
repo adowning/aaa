@@ -1,28 +1,28 @@
 import { defaultStore } from "../components/firebaseInit";
 import axios from "axios";
+import moment from "moment";
+// const api = axios.create({
+//   baseURL: "https://node-red.ashdevtools.com/api",
+//   timeout: 8000
+// });
 
-const api = axios.create({
-  baseURL: "https://node-red.ashdevtools.com/api",
-  timeout: 8000
-});
+// if (process.env.NODE_ENV == "devbbelopment") {
+//   console.log(process.env.NODE_ENV);
+// var fireFunctions = axios.create({
+//   baseURL: "http://localhost:5001/andrewsadmin/us-central1",
+//   timeout: 8000,
+//   ContentType: "application/json"
+// });
+// } else {
+//   console.log(process.env.NODE_ENV);
 
-if (process.env.NODE_ENV == "devbbelopment") {
-  console.log(process.env.NODE_ENV);
-  var fireFunctions = axios.create({
-    baseURL: "http://localhost:5001/andrewsadmin/us-central1",
-    timeout: 8000,
-    ContentType: "application/json"
-  });
-} else {
-  console.log(process.env.NODE_ENV);
-
-  var fireFunctions = axios.create({
-    baseURL:
-      "https://us-central1-andrewsadmin.cloudfunctions.net/getUserFromHumanity",
-    timeout: 8000,
-    ContentType: "application/json"
-  });
-}
+// var fireFunctions = axios.create({
+//   baseURL:
+//     "https://us-central1-andrewsadmin.cloudfunctions.net/getUserFromHumanity",
+//   timeout: 8000,
+//   ContentType: "application/json"
+// });
+// }
 const AuthModule = {
   state: {
     user: null,
@@ -31,23 +31,32 @@ const AuthModule = {
   },
   mutations: {
     setUser(state, payload) {
-      console.log(payload);
-      state.user = payload;
+      // console.log(payload)
+      if (payload) {
+        state.user = payload.user;
+        state.currentTimeSheet = payload.ts.data;
+      } else {
+        state.user = null;
+        state.currentTimeSheet = null;
+      }
+    },
+    setTimeClock(state, payload) {
+      state.currentTimeSheet = payload;
     }
   },
   actions: {
     adjustTimeClock({ commit }, payload) {
-      commit("setLoading", true);
-      humanityService
-        .post("/timesheet/", {
-          intEmployeeId: 1,
-          intOpunitId: 3,
-          action: "start"
+      console.log(payload.currentTimeSheet);
+
+      axios
+        .post("https://58384bf4.ngrok.io/red/api/clock", {
+          id: payload.employeeId,
+          notes: payload.notes
         })
         .then(response => {
-          if (response.data.code == 700) {
-            commit("setClockStatus", response.data.timesheet);
-          }
+          console.log(response);
+          commit("setTimeClock", response.data.data);
+          // commit("setTimeClock", "out");
         })
         .catch(error => {
           console.log(error);
@@ -76,7 +85,7 @@ const AuthModule = {
       var $this = this;
       firebase
         .auth()
-        .signInWithEmailAndPassword(payload.email, "Andrews1")
+        .signInWithEmailAndPassword(payload.email, payload.password)
         .catch(function(error) {
           var errorCode = error.code;
           var errorMessage = error.message;
@@ -94,8 +103,8 @@ const AuthModule = {
               }
             )
             .then(response => {
-              console.log(response.data.data);
-              commit("setUser", response.data.data);
+              console.log(response.data);
+              commit("setUser", response.data);
             });
         })
         .catch(error => {

@@ -53,16 +53,19 @@ plugins.forEach(plugin => plugin({ app, router, store, Vue }))
 
 
 
-import electron from 'electron'
-Vue.prototype.$q.electron = electron
 
 
 
 
+  
+document.addEventListener('deviceready', () => {
+Vue.prototype.$q.cordova = window.cordova
 
 
 
 new Vue(app)
 
 
+
+}, false) // on deviceready
 

@@ -7,6 +7,11 @@ export default [
     component: () => import("components/Login")
   },
   {
+    // Always leave this as last one
+    path: "/logout",
+    component: () => import("components/Logout")
+  },
+  {
     path: "/default",
     component: () => import("components/default"),
     children: [

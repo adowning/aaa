@@ -16,10 +16,103 @@
           <!-- <div slot="subtitle">Administration Application v0.0.1</div> -->
         </q-toolbar-title>
         <q-search inverted v-model="search" color="none" value="x" class="q-mr-xl" />
-		
-                <span>{{user.name}}</span>
-		
-                    <q-btn flat round dense icon="exit to app" label="Logout"  @click="logOut()"></q-btn>
+		  <!-- <img :src="user.avatar.small" style="height: 40px; width: 40px;" class=" img-thumbnail hidden-print inline-block" >  -->
+			 <!-- <span style="color: white; "><strong>{{user.name}}</strong></span> -->
+	<!-- <q-btn-group >
+    <q-btn-dropdown  color="primary" label="Three" split>
+    <q-list link>
+      <q-item v-close-overlay>
+        <q-item-side icon="folder" inverted color="primary" />
+        <q-item-main>
+          <q-item-tile label>Photos</q-item-tile>
+          <q-item-tile sublabel>February 22, 2016</q-item-tile>
+        </q-item-main>
+        <q-item-side right icon="info" color="amber" />
+      </q-item>
+      <q-item-separator inset />
+      <q-list-header inset>Files</q-list-header>
+      <q-item v-close-overlay>
+        <q-item-side icon="assignment" inverted />
+        <q-item-main>
+          <q-item-tile label>Vacation</q-item-tile>
+          <q-item-tile sublabel>February 22, 2016</q-item-tile>
+        </q-item-main>
+        <q-item-side right icon="info" color="amber" />
+      </q-item>
+    </q-list>
+  </q-btn-dropdown>
+  <q-btn-dropdown  color="primary" label="Three" split>
+    <q-list link>
+      <q-item v-close-overlay>
+        <q-item-side icon="folder" inverted color="primary" />
+        <q-item-main>
+          <q-item-tile label>Photos</q-item-tile>
+          <q-item-tile sublabel>February 22, 2016</q-item-tile>
+        </q-item-main>
+        <q-item-side right icon="info" color="amber" />
+      </q-item>
+      <q-item-separator inset />
+      <q-list-header inset>Files</q-list-header>
+      <q-item v-close-overlay>
+        <q-item-side icon="assignment" inverted />
+        <q-item-main>
+          <q-item-tile label>Vacation</q-item-tile>
+          <q-item-tile sublabel>February 22, 2016</q-item-tile>
+        </q-item-main>
+        <q-item-side right icon="info" color="amber" />
+      </q-item>
+    </q-list>
+  </q-btn-dropdown>
+</q-btn-group> -->
+  	<q-btn-dropdown  label="Create New">
+  <!-- dropdown content -->
+  <q-list link>
+    <q-item>
+      <q-item-main>
+        <q-item-tile label>Asset</q-item-tile>
+      </q-item-main>
+    </q-item>
+     <q-item>
+      <q-item-main>
+        <q-item-tile label>Consumable</q-item-tile>
+      </q-item-main>
+    </q-item>
+  </q-list>
+</q-btn-dropdown>
+                  	<q-btn-dropdown  icon="person">
+  <!-- dropdown content -->
+  <q-list link>
+    <q-item>
+      <q-item-main>
+        <q-item-tile label>Asset</q-item-tile>
+      </q-item-main>
+    </q-item>
+     <q-item>
+      <q-item-main>
+        <q-item-tile label>Consumable</q-item-tile>
+      </q-item-main>
+    </q-item>
+  </q-list>
+</q-btn-dropdown>
+		<q-btn-dropdown  :label="user.firstname">
+  <!-- dropdown content -->
+  <q-list link>
+      <q-item v-close-overlay to="/profile">
+        <q-item-side icon="person" inverted color="secondary" />
+        <q-item-main>
+          <q-item-tile label>Profile</q-item-tile>
+        </q-item-main>
+      </q-item>
+      <!-- <q-item-separator inset /> -->
+      <q-item v-close-overlay to="/logout">
+        <q-item-side icon="exit to app" inverted color="secondary" />
+        <q-item-main >
+          <q-item-tile label >Log Out</q-item-tile>
+        </q-item-main>
+      </q-item>
+    </q-list>
+</q-btn-dropdown>
+                    <!-- <q-btn flat round dense icon="exit to app" label="user.name"  @click="logOut()"></q-btn> -->
       </q-toolbar>
     </q-layout-header>
 
@@ -35,46 +128,45 @@
 		</div>
      <div id="profile" class="row justify-center">
        <div row class="q-pt-lg">
-  <img :src="user.avatar.medium" class="avatar img-thumbnail hidden-print inline-block" > 
+  <img :src="user.avatar.medium" style="height: 80px; width: 80px;" class="avatar img-thumbnail hidden-print inline-block" > 
        </div>
    
       </div>
 			  <!-- <div class="row justify-center q-mt-sm"> -->
 						  <div class="row justify-center q-pt-sm" >
-			 <span style="color: white; "><strong>{{user.name}}</strong></span>
+			 <!-- <span style="color: white; "><strong>{{user.name}}</strong></span> -->
        </div>
 						  <div class="row justify-center " >
-			 <div v-if="user.employee_type != 5">
-			 <span style="color: purple;" v-if="currentTimeSheet">Clocked In</span>
-			 <span class="q-body-1" v-else>You are not clocked in</span>
+			 <div v-if="user.group != 5">
+			 <span style="color: purple;" v-if="currentTimeSheet && currentTimeSheet.out_day == 0">Clocked In</span>
+			 <!-- <span class="q-body-1" v-else>You are not clocked in</span> -->
 			 </div>
 			 <div v-else>
-         		 <span style="color: purple;" v-if="currentTimeSheet">Billing Hours Started</span>
+         		 <span style="color: purple;" v-if="currentTimeSheet && currentTimeSheet.out_day == 0">Billing Hours Started</span>
                <span class="q-body-1" v-else>Contractor</span>
        </div>
 						  </div>
        
 			<div class="row justify-center q-mt-md" >
       <!-- <q-btn  size="sm" color="secondary" label="Profile" /> -->
-			<template v-if="user.employee_type != 5">
+			<template v-if="user.group != 5">
       
-			<template v-if="currentTimeSheet">
+			<template v-if="currentTimeSheet && currentTimeSheet.out_day == 0">
 				<q-btn size="sm" color="secondary" label="Start Break"/>
 			<p style="padding-left: 5px;"></p> 
-      <q-btn size="sm" color="secondary" label="Clock Out" @click="clockOut(false)"/> </template> 
-     <q-btn size="sm" color="secondary" label="Clock In" @click="clockIn(false)" v-else/>
+      <q-btn size="sm" color="secondary" label="Clock Out" @click="adjustClock()"/> </template> 
+     <q-btn size="sm" color="secondary" label="Clock In" @click="adjustClock()" v-else/>
  </template>
 			<template v-else>
   
-			<template v-if="currentTimeSheet">
-				<q-btn size="sm" color="secondary" label="Start Break"/>
+			<template v-if="currentTimeSheet && currentTimeSheet.out_day == 0">
+				<!-- <q-btn size="sm" color="secondary" label="Start Break"/> -->
 			<p style="padding-left: 5px;"></p> 
-      <q-btn size="sm" color="secondary" label="Stop Billing" @click="clockOut(true)"/> </template> 
-     <q-btn size="sm" color="secondary" label="Start Billing" @click="clockIn(true)" v-else/>
+      <q-btn size="sm" color="secondary" label="Stop Billing" @click="adjustClock(true)"/> </template> 
+     <q-btn size="sm" color="secondary" label="Start Billing" @click="adjustClock(true)" v-else/>
 
       </template>
  
-			<template
 			</div>
 			<hr>
      <div row>
@@ -89,7 +181,7 @@
       </q-item>
   <q-collapsible indent icon="devices other" label="Assets" >
       <q-item to="/hardware">
-        <q-item-main label="Hardware"  />
+        <q-item-main label="Assets"  />
       </q-item>
            <q-item to="/consumables">
         <q-item-main  label="Consumables"  />
@@ -163,7 +255,7 @@
         color="primary"
         v-close-overlay
         label="Submit"
-        @click="contractorLogin()"
+        @click="adjustClock()"
       />
          <q-btn
         color="primary"
@@ -180,7 +272,7 @@
         > I plan to tie this into the assets we have to track what is costing what. If you make a mistake or forget to clock in be sure to let me know so I can adjust. </q-alert>
     <div class="layout-padding">
  <!-- Single Line Input -->
- <q-form>
+
 
 <label dark>Enter equipment you plan to work on:</label>
 <q-input v-model="item1" float-label="Item 1" placeholder="" />
@@ -195,7 +287,7 @@
   :max-height="100"
   rows="7"
 /><!-- max-height refers to pixels -->
- </q-form>
+
 
      
       <!-- <p>Enter notes here</p> -->
@@ -287,7 +379,11 @@ export default {
     );
   },
   methods: {
-    contractorLogin() {
+    adjustClock(contractor, inout) {
+      if (contractor && !this.opend) {
+        this.opened = true;
+        return;
+      }
       var notes =
         this.item1 +
         "," +
@@ -296,27 +392,14 @@ export default {
         this.item1 +
         "," +
         this.modal_notes;
-      console.log(notes);
-    },
-    clockOut(contractor) {
       var vm = this;
       this.$store
-        .dispatch("clockUserOutDeputy", {})
-        .then(function() {
-          // Notify.create("You have been loged out")
-          // vm.$router.push({ path: "/" })
+        .dispatch("adjustTimeClock", {
+          contractor: true,
+          notes: notes,
+          employeeId: this.user.id,
+          currentTimeSheet: this.currentTimeSheet
         })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
-    clockIn(contractor) {
-      if (contractor) {
-        this.opened = true;
-      }
-      var vm = this;
-      this.$store
-        .dispatch("clockUserInDeputy", {})
         .then(function() {
           // Notify.create("You have been loged out")
           // vm.$router.push({ path: "/" })
@@ -332,6 +415,7 @@ export default {
     },
     // openURL,
     logOut(reason) {
+      console.log("logging out");
       var vm = this;
       this.$store
         .dispatch("signUserOut", {})
@@ -367,6 +451,6 @@ img.avatar {
   vertical-align: bottom;
 }
 #profile {
-  height: 120px;
+  height: 85px;
 }
 </style>

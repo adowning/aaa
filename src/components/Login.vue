@@ -111,16 +111,6 @@ export default {
         .then(() => {
           console.log("back");
         });
-      //   this.$store
-      //     .dispatch("signUserIn", {
-      //       email: email,
-      //       pass: pass,
-      //       username: username
-      //     })
-      //     .then(() => {
-      //       // this.$store.dispatch("loadMyData", {})
-      //       //   this.$store.dispatch("updateClockStatus", this.user);
-      //     });
     },
     onDismissed() {
       this.$store.dispatch("clearError");
