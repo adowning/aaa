@@ -5612,7 +5612,7 @@ function map_obj(obj, fn){
   }, {})
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/7zip"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules\\7zip"))
 
 /***/ }),
 /* 39 */
